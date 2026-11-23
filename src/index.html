@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic Explore</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="spotlight-shell">
+    <!-- Barra de Busca Principal -->
+    <div id="search-view">
+      <div class="search-bar">
+        <span class="search-icon" aria-hidden="true">
+          <img src="logo.png" alt="Magic Explore" class="brand-logo-bar" />
+        </span>
+
+        <input
+          id="search-input"
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Magic Explore — buscar aplicativos, PC ou web..."
+        />
+
+        <div class="bar-actions">
+          <span id="hotkey-pill" class="kbd-pill" title="Atalho atual">Win + Space</span>
+          <button id="open-settings-btn" class="icon-btn" title="Configurações" aria-label="Configurações">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista ao vivo de aplicativos -->
+      <div id="results-container" class="results-container hidden">
+        <div class="divider"></div>
+        <ul id="results-list" class="results-list" role="listbox"></ul>
+      </div>
+
+      <!-- Painel quando nenhum aplicativo corresponde -->
+      <div id="fallback-container" class="fallback-container hidden">
+        <div class="divider"></div>
+        <div class="fallback-list">
+          <button id="btn-search-explorer" class="fallback-item active" type="button">
+            <span class="fallback-icon explorer">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </span>
+            <span class="fallback-text">
+              <span class="fallback-title">Buscar <strong id="explorer-query-preview"></strong> no computador</span>
+              <span class="fallback-sub">Abre o Explorador de Arquivos pesquisando em todo o PC</span>
+            </span>
+            <span class="kbd-action" id="badge-1x-enter">1× Enter ↵</span>
+          </button>
+
+          <button id="btn-search-web" class="fallback-item" type="button">
+            <span class="fallback-icon web">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </span>
+            <span class="fallback-text">
+              <span class="fallback-title">Pesquisar <strong id="web-query-preview"></strong> no Google</span>
+              <span class="fallback-sub">Abre o navegador padrão com a busca na Web</span>
+            </span>
+            <span class="kbd-action">2× Enter ↵↵</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu de Configurações (mesma estética Apple HIG) -->
+    <div id="settings-view" class="settings-view hidden">
+      <div class="settings-header">
+        <button id="back-to-search-btn" class="back-btn" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Voltar
+        </button>
+        <div class="settings-brand">
+          <img src="logo.png" alt="Magic Explore" class="brand-logo-settings" />
+          <span class="settings-title">Configurações · Magic Explore</span>
+        </div>
+        <span class="settings-version">v1.0</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="settings-body">
+        <!-- Iniciar com o Windows -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Iniciar com o Windows</div>
+            <div class="setting-desc">Abre discretamente na bandeja ao ligar o computador</div>
+          </div>
+          <label class="apple-switch">
+            <input type="checkbox" id="toggle-autostart" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Deixar fundo da tela opaco -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Deixar fundo da tela opaco ao abrir</div>
+            <div class="setting-desc">Cobre o restante da tela com fundo escuro focado enquanto a barra está aberta</div>
+          </div>
+          <label class="apple-switch">
+            <input type="checkbox" id="toggle-opaque-backdrop" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Aviso em janelas de Administrador -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Aviso em janela de Administrador</div>
+            <div class="setting-desc">Notifica quando o atalho é pausado em telas elevadas (ex: Gerenciador de Tarefas)</div>
+          </div>
+          <label class="apple-switch">
+            <input type="checkbox" id="toggle-admin-toast" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Tecla de Atalho -->
+        <div class="setting-row">
+          <div class="setting-info">
+            <div class="setting-label">Tecla de Atalho Global</div>
+            <div class="setting-desc" id="hotkey-status-desc">Ativo agora — clique para escolher outra combinação</div>
+          </div>
+          <div class="hotkey-controls">
+            <span id="settings-hotkey-display" class="kbd-pill large">Win + Space</span>
+            <button id="record-hotkey-btn" class="apple-btn secondary" type="button">Alterar</button>
+          </div>
+        </div>
+
+        <!-- Botão de reindexar apps -->
+        <div class="setting-row compact">
+          <div class="setting-info">
+            <div class="setting-label">Índice de aplicativos</div>
+            <div class="setting-desc" id="app-count-desc">Aplicativos carregados em memória</div>
+          </div>
+          <button id="refresh-apps-btn" class="apple-btn ghost" type="button">Atualizar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Autorização de Conflito com o Windows -->
+    <div id="conflict-modal" class="conflict-overlay hidden">
+      <div class="conflict-card">
+        <div class="conflict-icon">
+          <img src="logo.png" alt="Magic Explore" class="brand-logo-modal" />
+        </div>
+        <h2 id="conflict-title">Substituir atalho do Windows?</h2>
+        <p id="conflict-message"></p>
+        <p id="conflict-tip" class="conflict-tip"></p>
+        <div class="conflict-actions">
+          <button id="conflict-cancel-btn" class="apple-btn secondary" type="button">Escolher outro</button>
+          <button id="conflict-confirm-btn" class="apple-btn primary" type="button">Autorizar e Ativar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

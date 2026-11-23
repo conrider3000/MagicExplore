@@ -1,0 +1,11 @@
+{
+  "$schema": "https://gen.tauri.app/schemas/capability/2",
+  "identifier": "default",
+  "description": "Permissões padrão para Magic Explore",
+  "windows": ["main", "backdrop", "admin-toast"],
+  "permissions": [
+    "core:default",
+    "core:event:default",
+    "core:window:default"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "magic-explore",
+  "version": "1.0.0",
+  "description": "Barra de busca flutuante estilo Apple Spotlight para Windows 10 e 11",
+  "private": true,
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.5.0"
+  }
+}

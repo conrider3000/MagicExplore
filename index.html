@@ -1,0 +1,2524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic Explore v1.0 — Busca Flutuante Estilo Apple Spotlight para Windows 10 e 11</title>
+  <meta name="description" content="Barra de busca flutuante ultraleve estilo Apple HIG para Windows 10 e 11. Abra aplicativos ao vivo com Win + Space, pesquise arquivos no Explorer com 1× Enter ou busque no Google com 2× Enter." />
+  <meta name="theme-color" content="#080a10" />
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Magic Explore v1.0 — Busca Flutuante Estilo Apple para Windows" />
+  <meta property="og:description" content="Pressione Win + Space para abrir uma barra centralizada instantânea: aplicativos ao vivo, busca em todo o PC com 1× Enter e pesquisa no Google com 2× Enter." />
+  <meta property="og:image" content="./assets/logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Magic Explore v1.0 — Busca Flutuante Estilo Apple para Windows" />
+  <meta name="twitter:description" content="Launcher ultraleve estilo Spotlight para Windows 10 e 11 com 1× Enter (Apps/Explorer) e 2× Enter (Google)." />
+  <meta name="twitter:image" content="./assets/logo.png" />
+
+  <link rel="icon" type="image/x-icon" href="./assets/icon.ico" />
+  <link rel="icon" type="image/png" href="./assets/logo.png" />
+  <link rel="apple-touch-icon" href="./assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #07080d;
+      --bg-elevated: #0e1018;
+      --surface: #131622;
+      --surface-hover: #191d2d;
+      --glass: rgba(24, 25, 34, 0.78);
+      --border: rgba(255, 255, 255, 0.085);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #f5f5f7;
+      --text-secondary: #9da4b8;
+      --text-muted: #697086;
+      --blue: #0a84ff;
+      --blue-bright: #47a3ff;
+      --blue-soft: rgba(10, 132, 255, 0.14);
+      --blue-border: rgba(10, 132, 255, 0.36);
+      --purple: #7c4dff;
+      --gold: #ffc83d;
+      --gold-soft: rgba(255, 200, 61, 0.14);
+      --gold-border: rgba(255, 200, 61, 0.34);
+      --green: #30d158;
+      --amber: #ff9f0a;
+      --red: #ff5f57;
+      --radius-lg: 22px;
+      --radius-md: 15px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(1050px 540px at 50% -130px, rgba(10, 132, 255, 0.22), transparent 68%),
+        radial-gradient(640px 440px at 84% 16%, rgba(124, 77, 255, 0.13), transparent 65%),
+        radial-gradient(520px 380px at 16% 24%, rgba(255, 200, 61, 0.07), transparent 65%);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Sticky Glass Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(7, 8, 13, 0.78);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      height: 70px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.025em;
+    }
+
+    .brand img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(10, 132, 255, 0.35));
+    }
+
+    .brand-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .nav-center {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .nav-center a {
+      transition: color 0.16s ease;
+    }
+
+    .nav-center a:hover {
+      color: var(--text);
+    }
+
+    .nav-actions {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.16s ease;
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--border-strong);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(180deg, #1f93ff 0%, #0071e3 100%);
+      box-shadow: 0 6px 18px rgba(10, 132, 255, 0.3);
+      transition: transform 0.14s ease, filter 0.16s ease;
+    }
+
+    .btn-nav-cta:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 48px 0 44px;
+      text-align: center;
+    }
+
+    .hero-logo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      position: relative;
+      width: fit-content;
+    }
+
+    .hero-logo-wrap::before {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(10, 132, 255, 0.25) 0%, rgba(255, 200, 61, 0.12) 42%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-logo {
+      position: relative;
+      z-index: 1;
+      width: 168px;
+      height: 168px;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 38px rgba(10, 132, 255, 0.42));
+      animation: floatLogo 5s ease-in-out infinite;
+    }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 15px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      color: #8cc8ff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 5vw, 3.65rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      max-width: 820px;
+      margin: 0 auto 20px;
+    }
+
+    h1 .accent {
+      background: linear-gradient(135deg, #64b5ff 0%, #a58bff 52%, #ffd15c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      max-width: 670px;
+      margin: 0 auto 30px;
+      color: var(--text-secondary);
+      font-size: 1.11rem;
+      font-weight: 400;
+    }
+
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 9px;
+      font-family: "JetBrains Mono", "Segoe UI", monospace;
+      font-size: 0.85em;
+      font-weight: 700;
+      color: #ffffff;
+      background: #1b2030;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-bottom-width: 3px;
+      border-radius: 7px;
+      transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    kbd.pressed {
+      transform: translateY(2px);
+      border-bottom-width: 1px;
+      border-color: var(--blue-bright);
+      background: rgba(10, 132, 255, 0.35);
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 13px;
+      margin-bottom: 22px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 28px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #1f93ff 0%, #0071e3 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 1px solid rgba(120, 192, 255, 0.38);
+      box-shadow: 0 14px 34px rgba(10, 132, 255, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+      transition: transform 0.15s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+      box-shadow: 0 18px 40px rgba(10, 132, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    }
+
+    .btn-primary img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 15px 24px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.98rem;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.14s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 24px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 44px;
+    }
+
+    .trust-strip span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trust-strip svg {
+      color: var(--blue-bright);
+    }
+
+    /* Interactive Playground Simulator */
+    .playground {
+      width: 100%;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(19, 22, 34, 0.94) 0%, rgba(12, 14, 22, 0.98) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: 0 32px 84px rgba(0, 0, 0, 0.62);
+      text-align: left;
+    }
+
+    .playground-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .playground-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .live-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.71rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--gold-soft);
+      color: var(--gold);
+      border: 1px solid var(--gold-border);
+    }
+
+    .playground-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seg-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .seg-btn:hover {
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    .seg-btn.active {
+      background: var(--blue-soft);
+      border-color: var(--blue-border);
+      color: #b8dcff;
+    }
+
+    .seg-btn.amber-btn.active {
+      background: rgba(255, 159, 10, 0.16);
+      border-color: rgba(255, 159, 10, 0.42);
+      color: #ffd180;
+    }
+
+    /* Simulated Windows 11 Desktop Stage */
+    .desktop-stage {
+      position: relative;
+      width: 100%;
+      min-height: 410px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      background:
+        radial-gradient(circle at 22% 28%, rgba(10, 132, 255, 0.34) 0%, transparent 45%),
+        radial-gradient(circle at 78% 65%, rgba(124, 77, 255, 0.3) 0%, transparent 48%),
+        linear-gradient(135deg, #0d1528 0%, #11182c 50%, #0a0f1d 100%);
+      padding: 26px 20px 62px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    /* Fake Desktop Background Window (to show transparency vs opaque backdrop) */
+    .fake-desktop-card {
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      width: 220px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .fake-desktop-card .fake-lines {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .fake-desktop-card .fake-lines span {
+      display: block;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    /* Opaque Backdrop Overlay inside Simulator */
+    .sim-opaque-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 46%, #151724 0%, #090a10 70%, #06070b 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease;
+      z-index: 2;
+    }
+
+    .desktop-stage.opaque-on .sim-opaque-overlay {
+      opacity: 0.97;
+    }
+
+    /* Simulated Admin Toast Pill */
+    .sim-admin-pill {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-14px) scale(0.95);
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(22, 22, 27, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.52);
+      font-size: 0.78rem;
+      color: #f5f5f7;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .sim-admin-pill.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .sim-admin-pill img {
+      width: 17px;
+      height: 17px;
+      object-fit: contain;
+    }
+
+    .sim-admin-pill .amber-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    /* Simulated Magic Explore Bar */
+    .sim-spotlight {
+      position: relative;
+      z-index: 6;
+      width: 100%;
+      max-width: 620px;
+      border-radius: 18px;
+      background: rgba(24, 24, 30, 0.82);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+    }
+
+    .sim-spotlight.closed {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+    }
+
+    .sim-search-row {
+      height: 62px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sim-search-row img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(10, 132, 255, 0.32));
+    }
+
+    .sim-input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #f5f5f7;
+      font-family: inherit;
+      font-size: 1.08rem;
+      caret-color: var(--blue);
+    }
+
+    .sim-input::placeholder {
+      color: rgba(235, 235, 245, 0.42);
+    }
+
+    .sim-kbd-pill {
+      padding: 4px 9px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(235, 235, 245, 0.65);
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .sim-gear-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: rgba(235, 235, 245, 0.65);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.14s ease, color 0.14s ease;
+    }
+
+    .sim-gear-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+    }
+
+    .sim-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.085);
+    }
+
+    .sim-results {
+      list-style: none;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .sim-result-item {
+      height: 46px;
+      padding: 0 12px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+
+    .sim-result-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .sim-result-item.selected {
+      background: rgba(10, 132, 255, 0.85);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .sim-app-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      flex-shrink: 0;
+    }
+
+    .sim-result-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sim-result-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .sim-result-name mark {
+      background: transparent;
+      color: #7cc4ff;
+      font-weight: 800;
+    }
+
+    .sim-result-item.selected .sim-result-name mark {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .sim-result-sub {
+      font-size: 0.72rem;
+      color: rgba(235, 235, 245, 0.65);
+    }
+
+    .sim-result-item.selected .sim-result-sub {
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .sim-open-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      opacity: 0;
+    }
+
+    .sim-result-item.selected .sim-open-tag {
+      opacity: 1;
+    }
+
+    /* Simulator Fallback Panel (1x Enter Explorer vs 2x Enter Google) */
+    .sim-fallback {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sim-fallback-btn {
+      width: 100%;
+      height: 50px;
+      padding: 0 12px;
+      border-radius: 11px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+      color: #f5f5f7;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: background 0.12s ease;
+    }
+
+    .sim-fallback-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sim-fb-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .sim-fb-icon.exp {
+      background: rgba(255, 191, 46, 0.16);
+      border: 1px solid rgba(255, 191, 46, 0.3);
+    }
+
+    .sim-fb-icon.web {
+      background: rgba(10, 132, 255, 0.18);
+      border: 1px solid rgba(10, 132, 255, 0.32);
+    }
+
+    .sim-fb-text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sim-fb-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sim-fb-sub {
+      font-size: 0.72rem;
+      color: rgba(235, 235, 245, 0.6);
+    }
+
+    /* Simulator Settings View */
+    .sim-settings {
+      padding: 12px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sim-settings-head {
+      height: 48px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .sim-settings-brand {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .sim-settings-brand img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .sim-back-btn {
+      padding: 4px 10px;
+      border-radius: 7px;
+      border: none;
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+
+    .sim-setting-row {
+      padding: 10px 13px;
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sim-setting-title {
+      font-size: 0.83rem;
+      font-weight: 600;
+    }
+
+    .sim-setting-desc {
+      font-size: 0.71rem;
+      color: rgba(235, 235, 245, 0.58);
+    }
+
+    .sim-toggle {
+      width: 40px;
+      height: 23px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      position: relative;
+      transition: background 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .sim-toggle::after {
+      content: "";
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: #ffffff;
+      transition: transform 0.18s ease;
+    }
+
+    .sim-toggle.on {
+      background: var(--green);
+    }
+
+    .sim-toggle.on::after {
+      transform: translateX(17px);
+    }
+
+    /* Simulated Windows 11 Taskbar at bottom of stage */
+    .sim-taskbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40px;
+      padding: 0 16px;
+      background: rgba(14, 16, 24, 0.86);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+      font-size: 0.73rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .sim-tray {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sim-tray-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      border: 1px solid rgba(10, 132, 255, 0.35);
+      background: rgba(10, 132, 255, 0.15);
+      color: #cde6ff;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .sim-tray-btn img {
+      width: 15px;
+      height: 15px;
+      object-fit: contain;
+    }
+
+    /* Quick Preset Chips */
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .preset-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .preset-chip {
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      font-weight: 600;
+      transition: all 0.14s ease;
+    }
+
+    .preset-chip:hover {
+      color: var(--text);
+      border-color: var(--blue-border);
+      background: var(--blue-soft);
+    }
+
+    .playground-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sim-triggers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border-radius: 10px;
+      border: 1px solid var(--blue-border);
+      background: var(--blue-soft);
+      color: #d9ecff;
+      font-weight: 700;
+      font-size: 0.84rem;
+      transition: all 0.15s ease;
+    }
+
+    .trigger-btn:hover {
+      background: rgba(10, 132, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .trigger-btn.secondary-trig {
+      border-color: var(--border-strong);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+    }
+
+    .trigger-btn.secondary-trig:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .tray-toast {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: #0d1018;
+      border: 1px solid var(--border-strong);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .tray-toast.flash {
+      border-color: var(--blue-bright);
+      color: #e0f0ff;
+    }
+
+    .tray-toast img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    /* Section Headings */
+    section.block {
+      padding: 80px 0 12px;
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 660px;
+      margin: 0 auto 42px;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--blue-bright);
+      margin-bottom: 10px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.16;
+      margin-bottom: 12px;
+    }
+
+    .section-head p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* Problem vs Solution (Cookies & Coffee structural inspiration) */
+    .vs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .vs-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+
+    .vs-card.good {
+      background: linear-gradient(160deg, rgba(10, 132, 255, 0.13) 0%, var(--surface) 60%);
+      border-color: var(--blue-border);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .vs-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .vs-card.good .vs-tag {
+      color: var(--gold);
+    }
+
+    .vs-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      font-size: 0.94rem;
+      color: var(--text-secondary);
+    }
+
+    .vs-card.good .vs-list {
+      color: var(--text);
+    }
+
+    .vs-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .vs-icon {
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .vs-icon.bad {
+      color: var(--red);
+    }
+
+    .vs-icon.ok {
+      color: var(--green);
+    }
+
+    /* 4 Steps Grid */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .step-card {
+      min-width: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px 22px;
+      transition: border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .step-card:hover {
+      border-color: var(--blue-border);
+      transform: translateY(-2px);
+    }
+
+    .step-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #8cc8ff;
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .step-card h3 {
+      font-size: 1.04rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* Bento Features */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--blue-border);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue-bright);
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.04rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.91rem;
+      color: var(--text-secondary);
+    }
+
+    /* Comparison Table (Open Vynil Ripper structural inspiration) */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 680px;
+    }
+
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.91rem;
+    }
+
+    th {
+      background: var(--bg-elevated);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+    }
+
+    th.highlight-col {
+      color: var(--gold);
+      background: rgba(10, 132, 255, 0.14);
+    }
+
+    td.status-no {
+      color: var(--text-muted);
+    }
+
+    td.status-yes {
+      color: #a3d4ff;
+      font-weight: 600;
+      background: rgba(10, 132, 255, 0.05);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Download Hub */
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .dl-card {
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .dl-card.featured {
+      background: linear-gradient(165deg, rgba(10, 132, 255, 0.14) 0%, var(--surface) 58%);
+      border-color: var(--blue-border);
+      box-shadow: 0 20px 52px rgba(0, 0, 0, 0.42);
+    }
+
+    .dl-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .dl-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .dl-tag.rec {
+      background: var(--blue);
+      color: #ffffff;
+    }
+
+    .dl-tag.alt {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .dl-size {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.81rem;
+      color: var(--text-secondary);
+    }
+
+    .dl-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .dl-card-title img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .dl-card h3 {
+      font-size: 1.28rem;
+      font-weight: 800;
+    }
+
+    .dl-desc {
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .dl-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #d6def0;
+    }
+
+    .dl-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dl-list li::before {
+      content: "✓";
+      color: var(--blue-bright);
+      font-weight: 800;
+    }
+
+    .dl-actions {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dl-actions .btn-primary,
+    .dl-actions .btn-secondary {
+      width: 100%;
+    }
+
+    .hash-box {
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 9px;
+      background: rgba(0, 0, 0, 0.32);
+      border: 1px solid var(--border);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .hash-text {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-hash {
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .copy-hash:hover {
+      color: #ffffff;
+      border-color: var(--blue-border);
+    }
+
+    .smartscreen-note {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .smartscreen-note strong {
+      color: var(--text);
+    }
+
+    /* FAQ */
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      transition: border-color 0.16s ease;
+    }
+
+    details[open] {
+      border-color: var(--blue-border);
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "+";
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.2rem;
+      color: var(--blue-bright);
+    }
+
+    details[open] summary::after {
+      content: "−";
+    }
+
+    details p {
+      margin-top: 12px;
+      font-size: 0.94rem;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 84px;
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.28);
+      padding: 36px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    /* Responsive */
+    @media (max-width: 920px) {
+      .nav {
+        display: flex;
+        justify-content: space-between;
+      }
+      .nav-center {
+        display: none;
+      }
+      .vs-grid,
+      .steps-grid,
+      .bento-grid,
+      .download-grid {
+        grid-template-columns: 1fr;
+      }
+      .fake-desktop-card {
+        display: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        padding: 0 16px;
+      }
+      .hero-logo {
+        width: 132px;
+        height: 132px;
+      }
+      .hero-cta {
+        flex-direction: column;
+      }
+      .hero-cta .btn-primary,
+      .hero-cta .btn-secondary {
+        width: 100%;
+      }
+      .playground {
+        padding: 14px;
+      }
+      .playground-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#">
+        <img src="./assets/logo.png" alt="Logo Magic Explore" />
+        <span>Magic Explore</span>
+        <span class="brand-tag">v1.0</span>
+      </a>
+
+      <nav class="nav-center" aria-label="Navegação principal">
+        <a href="#simulador">Simulador</a>
+        <a href="#problema">Por que usar</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#comparativo">Comparativo</a>
+        <a href="#download">Download</a>
+        <a href="#faq">Dúvidas</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn-ghost" href="https://github.com/conrider3000/MagicExplore" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.08 11.08 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.07.78 2.16 0 1.56-.01 2.82-.01 3.2 0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+          <span>GitHub</span>
+        </a>
+        <button type="button" class="btn-ghost" id="nav-opaque-btn">
+          🌑 Testar Fundo Opaco
+        </button>
+        <a class="btn-nav-cta" href="#download">
+          ⬇ Baixar v1.0
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-logo-wrap">
+          <img class="hero-logo" src="./assets/logo.png" alt="Magic Explore — Lupa Mágica com Brilhos Dourados" />
+        </div>
+
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Versão 1.0.0 · Windows 10 &amp; 11 (64-bit) · Estética Apple HIG · 100% Gratuito
+        </div>
+
+        <h1>
+          Sua busca flutuante no Windows <span class="accent">com a magia e leveza do Spotlight.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          O <strong>Magic Explore</strong> fica silenciosamente no cantinho da barra do Windows. Pressione <kbd id="hero-k1">Win</kbd> + <kbd id="hero-k2">Space</kbd> para abrir uma barra centralizada instantânea: filtre aplicativos ao vivo, pesquise arquivos no computador todo com <kbd>1× Enter</kbd> ou busque direto no Google com <kbd>2× Enter</kbd>.
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn-primary" href="./downloads/Magic_Explore_v1.0_Setup.exe" download="Magic_Explore_v1.0_Setup.exe">
+            <img src="./assets/logo.png" alt="" />
+            Baixar Instalador v1.0 (.exe)
+          </a>
+          <a class="btn-secondary" href="#download">
+            Versão Portátil &amp; SHA-256
+          </a>
+        </div>
+
+        <div class="trust-strip">
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Instalador de 3,19 MB
+          </span>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            ~0% CPU quando parado
+          </span>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            1× Enter (App/Explorer) · 2× Enter (Google)
+          </span>
+          <span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Exceção automática no Windows Defender
+          </span>
+        </div>
+
+        <!-- Interactive Live Simulator -->
+        <div id="simulador" class="playground" aria-label="Simulador interativo do Magic Explore">
+          <div class="playground-bar">
+            <div class="playground-title">
+              <span class="live-pill">Demo Interativa</span>
+              Digite na barra ou teste os modos abaixo
+            </div>
+            <div class="playground-controls">
+              <button type="button" class="seg-btn active" id="sim-tab-search">🔍 Barra de Busca</button>
+              <button type="button" class="seg-btn" id="sim-tab-settings">⚙️ Configurações</button>
+              <button type="button" class="seg-btn" id="sim-btn-opaque">🌑 Fundo Opaco: OFF</button>
+              <button type="button" class="seg-btn amber-btn" id="sim-btn-admin">🛡️ Simular Tela de Admin</button>
+            </div>
+          </div>
+
+          <div class="desktop-stage" id="desktop-stage">
+            <!-- Fake background desktop window to contrast transparency vs opaque mode -->
+            <div class="fake-desktop-card">
+              <strong>Área de Trabalho · Windows 11</strong>
+              <div class="fake-lines">
+                <span style="width: 82%"></span>
+                <span style="width: 60%"></span>
+                <span style="width: 72%"></span>
+              </div>
+            </div>
+
+            <!-- Optional Fullscreen Opaque Overlay -->
+            <div class="sim-opaque-overlay" id="sim-opaque-overlay"></div>
+
+            <!-- Admin Mode Floating Pill -->
+            <div class="sim-admin-pill" id="sim-admin-pill">
+              <img src="./assets/logo.png" alt="" />
+              <span class="amber-dot"></span>
+              <strong>Tela de Administrador</strong>
+              <span style="opacity: 0.4">·</span>
+              <span>Win + Space pausado nesta janela</span>
+            </div>
+
+            <!-- Floating Spotlight Shell -->
+            <div class="sim-spotlight" id="sim-spotlight">
+              <!-- Search Mode -->
+              <div id="sim-view-search">
+                <div class="sim-search-row">
+                  <img src="./assets/logo.png" alt="Magic Explore" />
+                  <input
+                    id="sim-input"
+                    class="sim-input"
+                    type="text"
+                    value="fire"
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="Magic Explore — buscar aplicativos, PC ou web..."
+                  />
+                  <span class="sim-kbd-pill">Win + Space</span>
+                  <button type="button" class="sim-gear-btn" id="sim-gear-open" title="Abrir Configurações">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  </button>
+                </div>
+
+                <div id="sim-results-box">
+                  <div class="sim-divider"></div>
+                  <ul class="sim-results" id="sim-results-list"></ul>
+                </div>
+
+                <div id="sim-fallback-box" style="display: none;">
+                  <div class="sim-divider"></div>
+                  <div class="sim-fallback">
+                    <button type="button" class="sim-fallback-btn" id="sim-fb-explorer">
+                      <span class="sim-fb-icon exp">📁</span>
+                      <span class="sim-fb-text">
+                        <span class="sim-fb-title">Buscar <strong id="sim-exp-q"></strong> no computador</span>
+                        <span class="sim-fb-sub">Abre o Explorador de Arquivos pesquisando em todo o PC</span>
+                      </span>
+                      <span class="sim-kbd-pill">1× Enter ↵</span>
+                    </button>
+                    <button type="button" class="sim-fallback-btn" id="sim-fb-web">
+                      <span class="sim-fb-icon web">🌐</span>
+                      <span class="sim-fb-text">
+                        <span class="sim-fb-title">Pesquisar <strong id="sim-web-q"></strong> no Google</span>
+                        <span class="sim-fb-sub">Abre o seu navegador padrão (Firefox) com a busca na Web</span>
+                      </span>
+                      <span class="sim-kbd-pill">2× Enter ↵↵</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Settings Mode -->
+              <div id="sim-view-settings" style="display: none;">
+                <div class="sim-settings-head">
+                  <button type="button" class="sim-back-btn" id="sim-back-search">← Voltar</button>
+                  <div class="sim-settings-brand">
+                    <img src="./assets/logo.png" alt="" />
+                    <span>Configurações · Magic Explore</span>
+                  </div>
+                  <span style="color: rgba(255,255,255,0.4); font-size: 0.72rem;">v1.0</span>
+                </div>
+                <div class="sim-divider"></div>
+                <div class="sim-settings">
+                  <div class="sim-setting-row">
+                    <div>
+                      <div class="sim-setting-title">Iniciar com o Windows</div>
+                      <div class="sim-setting-desc">Abre discretamente na bandeja ao ligar o computador</div>
+                    </div>
+                    <button type="button" class="sim-toggle on" data-sim-toggle="autostart"></button>
+                  </div>
+                  <div class="sim-setting-row">
+                    <div>
+                      <div class="sim-setting-title">Deixar fundo da tela opaco ao abrir</div>
+                      <div class="sim-setting-desc">Cobre o restante da tela com fundo escuro focado</div>
+                    </div>
+                    <button type="button" class="sim-toggle" id="sim-toggle-opaque"></button>
+                  </div>
+                  <div class="sim-setting-row">
+                    <div>
+                      <div class="sim-setting-title">Aviso em janela de Administrador</div>
+                      <div class="sim-setting-desc">Notifica quando o atalho é pausado em telas elevadas</div>
+                    </div>
+                    <button type="button" class="sim-toggle on" data-sim-toggle="admin"></button>
+                  </div>
+                  <div class="sim-setting-row">
+                    <div>
+                      <div class="sim-setting-title">Tecla de Atalho Global</div>
+                      <div class="sim-setting-desc">Detecta conflitos nativos do Windows antes de salvar</div>
+                    </div>
+                    <span class="sim-kbd-pill" style="color: #fff;">Win + Space</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Simulated Windows 11 Taskbar -->
+            <div class="sim-taskbar">
+              <span>Windows 11 Desktop · Monitor Principal (Centralizado)</span>
+              <div class="sim-tray">
+                <button type="button" class="sim-tray-btn" id="sim-tray-toggle" title="Clique para abrir/fechar na bandeja">
+                  <img src="./assets/logo.png" alt="" />
+                  <span>Magic Explore na Bandeja</span>
+                </button>
+                <span>19:05</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preset Scenarios -->
+          <div class="preset-row">
+            <span class="preset-label">Testar exemplos:</span>
+            <button type="button" class="preset-chip" data-query="fire">🦊 App: "fire" (Firefox)</button>
+            <button type="button" class="preset-chip" data-query="calc">🧮 App Store: "calc" (Calculadora)</button>
+            <button type="button" class="preset-chip" data-query="relatorio_2026.pdf">📁 Arquivo PC: "relatorio_2026.pdf"</button>
+            <button type="button" class="preset-chip" data-query="como configurar rust">🌐 Busca Web: "como configurar rust"</button>
+          </div>
+
+          <div class="playground-footer">
+            <div class="sim-triggers">
+              <button type="button" class="trigger-btn" id="btn-sim-1x">
+                Simular <kbd id="k-enter1">1× Enter ↵</kbd>
+              </button>
+              <button type="button" class="trigger-btn secondary-trig" id="btn-sim-2x">
+                Simular <kbd id="k-enter2">2× Enter ↵↵</kbd>
+              </button>
+            </div>
+
+            <div class="tray-toast" id="sim-toast" aria-live="polite">
+              <img src="./assets/logo.png" alt="" />
+              <span id="sim-toast-text">App encontrado: "Firefox" · 1× Enter abre o aplicativo na hora</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem vs Solution -->
+    <section id="problema" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">[ O PROBLEMA vs. A SOLUÇÃO ]</span>
+          <h2>A busca do Windows ficou pesada. O Magic Explore devolve o foco.</h2>
+          <p>Substitua o menu lento e poluído do sistema por uma barra centralizada que obedece exatamente ao seu comando no teclado.</p>
+        </div>
+
+        <div class="vs-grid">
+          <div class="vs-card">
+            <div class="vs-tag">Busca Padrão do Windows (Win + S)</div>
+            <ul class="vs-list">
+              <li>
+                <span class="vs-icon bad">✕</span>
+                <span>Painel lateral pesado que demora para carregar e exibe notícias, anúncios e sugestões indesejadas</span>
+              </li>
+              <li>
+                <span class="vs-icon bad">✕</span>
+                <span>Mistura arquivos locais, configurações e resultados web sem deixar claro o que o <strong>Enter</strong> vai abrir</span>
+              </li>
+              <li>
+                <span class="vs-icon bad">✕</span>
+                <span>Tenta forçar o Microsoft Edge e o Bing mesmo quando seu navegador padrão é o <strong>Firefox com Google</strong></span>
+              </li>
+              <li>
+                <span class="vs-icon bad">✕</span>
+                <span>O atalho nobre <strong>Win + Space</strong> fica desperdiçado trocando o layout do teclado por acidente</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="vs-card good">
+            <div class="vs-tag">Com o Magic Explore (Win + Space)</div>
+            <ul class="vs-list">
+              <li>
+                <span class="vs-icon ok">✓</span>
+                <span>Barra flutuante estilo <strong>Apple Spotlight (HIG)</strong> centralizada na tela em menos de 50 ms</span>
+              </li>
+              <li>
+                <span class="vs-icon ok">✓</span>
+                <span><strong>1× Enter inteligente:</strong> se houver programa correspondente, abre o app; se não houver, pesquisa no <strong>Windows Explorer</strong> em todo o PC</span>
+              </li>
+              <li>
+                <span class="vs-icon ok">✓</span>
+                <span><strong>2× Enter (duplo Enter):</strong> abre imediatamente o seu navegador padrão (ex.: Firefox) pesquisando direto no <strong>Google</strong></span>
+              </li>
+              <li>
+                <span class="vs-icon ok">✓</span>
+                <span>Opção de <strong>fundo da tela opaco</strong> para foco total e aviso automático discreto quando estiver em uma janela de Administrador</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works in 4 steps -->
+    <section id="como-funciona" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">[ FLUXO EM 4 PASSOS ]</span>
+          <h2>Um único atalho para programas, arquivos e web.</h2>
+          <p>Projetado em Rust + Tauri v2 para não pesar em PCs modestos e responder no milissegundo em que você toca no teclado.</p>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-num">PASSO 01</span>
+            <h3>Instale e autorize</h3>
+            <p>O instalador adiciona automaticamente a exceção no Windows Defender, ativa o início com o PC e pede sua autorização para assumir o <kbd>Win</kbd> + <kbd>Space</kbd>.</p>
+          </article>
+
+          <article class="step-card">
+            <span class="step-num">PASSO 02</span>
+            <h3>Pressione Win + Space</h3>
+            <p>A barra surge centralizada no monitor ativo com desfoque Acrylic nativo (ou fundo opaco na tela toda, se ativado nas configurações).</p>
+          </article>
+
+          <article class="step-card">
+            <span class="step-num">PASSO 03</span>
+            <h3>1× Enter: App ou Explorer</h3>
+            <p>Os apps aparecem ao vivo enquanto você digita. Com app selecionado, <kbd>Enter</kbd> abre o programa. Sem app, <kbd>1× Enter</kbd> abre o Explorer pesquisando no PC todo.</p>
+          </article>
+
+          <article class="step-card">
+            <span class="step-num">PASSO 04</span>
+            <h3>2× Enter: Busca no Google</h3>
+            <p>Quando o termo digitado não é um aplicativo, dois toques rápidos no <kbd>Enter</kbd> (≤ 280 ms) abrem seu navegador padrão pesquisando direto no Google.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Features -->
+    <section id="recursos" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">[ ENGENHARIA &amp; RECURSOS ]</span>
+          <h2>Construído sob medida para Windows 10 e 11.</h2>
+          <p>Cada limitação do Windows foi tratada com hooks Win32 nativos para que a experiência seja fluida e sem efeitos colaterais.</p>
+        </div>
+
+        <div class="bento-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></svg>
+            </div>
+            <h3>Hook Nativo Win + Space</h3>
+            <p>Intercepta <code>WH_KEYBOARD_LL</code> em menos de 0,1 ms e injeta tecla virtual silenciosa (<code>0xE8</code>) para impedir que o Menu Iniciar abra ao soltar a tecla Windows.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3>Detector 1× vs 2× Enter (280 ms)</h3>
+            <p>Quando não há app correspondente, aguarda 280 ms no primeiro Enter: se não vier o segundo, abre o Windows Explorer (<code>search-ms:</code>); se vier, cancela o Explorer e abre o Google.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <h3>Centralização DPI &amp; Fundo Opaco</h3>
+            <p>Centraliza com precisão física em qualquer escala de DPI (100%, 125%, 150%) e inclui opção nas Configurações para cobrir o restante da tela com fundo escuro opaco.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Aviso em Telas de Administrador</h3>
+            <p>Detecta via <code>EVENT_SYSTEM_FOREGROUND</code> + <code>TokenElevation</code> quando você foca uma janela Admin (ex: Gerenciador de Tarefas) e exibe uma cápsula discreta sem roubar foco.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <h3>Apps Clássicos + Microsoft Store</h3>
+            <p>Indexa atalhos do Menu Iniciar/Desktop e aplicativos modernos UWP (<code>Get-StartApps</code>) extraindo os ícones reais via <code>IShellItemImageFactory</code> com cache instantâneo.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3>Bandeja &amp; Detector de Conflitos</h3>
+            <p>Fica no cantinho perto do relógio. Permite trocar a tecla de atalho a qualquer momento avisando caso a combinação escolhida substitua algum atalho do Windows.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section id="comparativo" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">[ COMPARATIVO ]</span>
+          <h2>Pesquisa do Windows vs. Launchers Electron vs. Magic Explore</h2>
+          <p>Por que a arquitetura híbrida Rust (Tauri v2) + HTML/CSS puro entrega estética Apple sem sacrificar computadores mais leves.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Recurso / Métrica</th>
+                <th>Pesquisa do Windows (Win + S)</th>
+                <th>Launchers Electron</th>
+                <th class="highlight-col">Magic Explore v1.0</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Tamanho do Instalador</strong></td>
+                <td class="status-no">Embutido no sistema</td>
+                <td class="status-no">~120 MB a 180 MB</td>
+                <td class="status-yes">✔ Apenas 3,19 MB (.exe NSIS)</td>
+              </tr>
+              <tr>
+                <td><strong>Uso de CPU quando fechado</strong></td>
+                <td class="status-no">Indexador constante em background</td>
+                <td class="status-no">Processos Chromium ativos</td>
+                <td class="status-yes">✔ ~0% CPU (100% orientado a eventos Win32)</td>
+              </tr>
+              <tr>
+                <td><strong>Atalho Win + Space nativo</strong></td>
+                <td class="status-no">❌ Troca layout do teclado</td>
+                <td class="status-no">❌ Falha no RegisterHotKey padrão</td>
+                <td class="status-yes">✔ Hook nativo com bloqueio do Menu Iniciar</td>
+              </tr>
+              <tr>
+                <td><strong>1× Enter (Explorer) vs 2× Enter (Web)</strong></td>
+                <td class="status-no">❌ Abre Bing no Microsoft Edge</td>
+                <td class="status-no">❌ Exige prefixos manuais (g:, f:)</td>
+                <td class="status-yes">✔ Automático: 1× Explorer · 2× Google no seu navegador</td>
+              </tr>
+              <tr>
+                <td><strong>Opção de Fundo da Tela Opaco</strong></td>
+                <td class="status-no">❌ Não possui</td>
+                <td class="status-no">❌ Não possui</td>
+                <td class="status-yes">✔ Ativável com 1 clique nas Configurações</td>
+              </tr>
+              <tr>
+                <td><strong>Aviso em Janelas de Administrador</strong></td>
+                <td class="status-no">N/A</td>
+                <td class="status-no">❌ Para de funcionar sem avisar</td>
+                <td class="status-yes">✔ Cápsula flutuante estilo Apple sem roubar foco</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Center -->
+    <section id="download" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">[ CENTRAL DE DOWNLOADS · v1.0.0 ]</span>
+          <h2>Baixe o Magic Explore para Windows.</h2>
+          <p>Escolha entre o instalador automatizado (que já configura o Windows Defender e o início com o PC) ou o executável portátil.</p>
+        </div>
+
+        <div class="download-grid">
+          <div class="dl-card featured">
+            <div>
+              <div class="dl-top">
+                <span class="dl-tag rec">Recomendado</span>
+                <span class="dl-size">3,19 MB · Windows 10/11 (x64)</span>
+              </div>
+              <div class="dl-card-title">
+                <img src="./assets/logo.png" alt="Magic Explore" />
+                <h3>Instalador Magic Explore v1.0</h3>
+              </div>
+              <p class="dl-desc">Assistente completo que prepara tudo automaticamente para uso diário no seu computador.</p>
+              <ul class="dl-list">
+                <li>Adiciona exceção automática no Windows Defender na instalação</li>
+                <li>Solicita autorização e ativa o atalho <strong>Win + Space</strong></li>
+                <li>Configura início automático junto com o Windows</li>
+                <li>Desinstalador nativo que restaura o Win + Space original na hora</li>
+              </ul>
+            </div>
+
+            <div class="dl-actions">
+              <a class="btn-primary" href="./downloads/Magic_Explore_v1.0_Setup.exe" download="Magic_Explore_v1.0_Setup.exe">
+                <img src="./assets/logo.png" alt="" />
+                Baixar Magic_Explore_v1.0_Setup.exe
+              </a>
+              <div class="hash-box" title="SHA-256 de Magic_Explore_v1.0_Setup.exe">
+                <span class="hash-text">SHA-256: 00CCD0940E856881F29B61FE085A0448F85ECE11007D25DAB25BE3814732A2D1</span>
+                <button type="button" class="copy-hash" data-hash="00CCD0940E856881F29B61FE085A0448F85ECE11007D25DAB25BE3814732A2D1">Copiar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dl-card">
+            <div>
+              <div class="dl-top">
+                <span class="dl-tag alt">Sem Instalação</span>
+                <span class="dl-size">10,54 MB · Windows 10/11 (x64)</span>
+              </div>
+              <div class="dl-card-title">
+                <img src="./assets/logo.png" alt="Magic Explore" />
+                <h3>Magic Explore Portátil v1.0</h3>
+              </div>
+              <p class="dl-desc">Executável único pronto para rodar direto de qualquer pasta sem passar pelo instalador.</p>
+              <ul class="dl-list">
+                <li>Abre direto na bandeja do sistema com a mesma estética Apple HIG</li>
+                <li>Exibe modal de autorização do <strong>Win + Space</strong> na 1ª execução</li>
+                <li>Salva configurações e cache em <code>%APPDATA%\Magic Explore</code></li>
+                <li>Inclui opção de fundo da tela opaco e aviso de Administrador</li>
+              </ul>
+            </div>
+
+            <div class="dl-actions">
+              <a class="btn-secondary" href="./downloads/Magic_Explore_Portable.exe" download="Magic_Explore_Portable.exe">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Baixar Magic_Explore_Portable.exe
+              </a>
+              <div class="hash-box" title="SHA-256 de Magic_Explore_Portable.exe">
+                <span class="hash-text">SHA-256: 7DE85DE871932470FCF2F4A37EE5714D8CB1DA85A9BE63E87C2F0E6D607DB26F</span>
+                <button type="button" class="copy-hash" data-hash="7DE85DE871932470FCF2F4A37EE5714D8CB1DA85A9BE63E87C2F0E6D607DB26F">Copiar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="smartscreen-note">
+          <div>
+            <strong>🛡️ Sobre o Windows Defender e Antivírus:</strong> como o Magic Explore utiliza um hook nativo de teclado (<code>WH_KEYBOARD_LL</code>) para assumir o atalho <strong>Win + Space</strong> e não possui certificado comercial EV pago da Microsoft, alguns antivírus podem exibir alerta de falso-positivo. <strong>O próprio instalador já oferece configurar a exceção automaticamente no Windows Defender com 1 clique</strong> antes de extrair o programa, e lembra o caminho da pasta ao finalizar caso você utilize outro antivírus.
+          </div>
+          <div>
+            No Windows SmartScreen (<em>"O Windows protegeu o computador"</em>), basta clicar em <strong>Mais informações</strong> → <strong>Executar assim mesmo</strong>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">[ PERGUNTAS FREQUENTES ]</span>
+          <h2>Tire suas dúvidas sobre o Magic Explore.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details>
+            <summary>Por que o instalador pede para adicionar o app nas exceções do Windows Defender?</summary>
+            <p>Para substituir o atalho nativo <strong>Win + Space</strong> do Windows sem abrir o menu de idioma nem o Menu Iniciar, o Magic Explore usa a API oficial de baixo nível do Windows (<code>WH_KEYBOARD_LL</code>). Antivírus costumam monitorar programas não assinados que usam essa API. O aplicativo não grava nenhuma tecla digitada — ele apenas verifica se a combinação do seu atalho foi pressionada. Ao aceitar a configuração automática no instalador, o Windows Defender já adiciona a pasta às exceções.</p>
+          </details>
+
+          <details>
+            <summary>Como eu troco o idioma/layout do teclado se o Magic Explore assumir o Win + Space?</summary>
+            <p>Você continua podendo alternar o idioma normalmente pelo atalho alternativo nativo do Windows (<strong>Alt + Shift</strong>) ou clicando na sigla do idioma (ex.: <code>POR</code> / <code>ENG</code>) no canto direito da barra de tarefas. Além disso, nas Configurações do Magic Explore você pode escolher qualquer outro atalho como <strong>Alt + Space</strong> ou <strong>Ctrl + Space</strong>.</p>
+          </details>
+
+          <details>
+            <summary>Como funciona a opção de deixar o fundo da tela opaco?</summary>
+            <p>Abra as <strong>Configurações</strong> do Magic Explore (clicando no ícone da engrenagem na barra ou pelo ícone na bandeja do sistema) e ative a chave <strong>"Deixar fundo da tela opaco ao abrir"</strong>. Sempre que a barra aparecer no meio da tela, o restante do monitor ficará coberto por um fundo escuro opaco para foco total. Clicar em qualquer ponto fora da barra fecha o Magic Explore na hora.</p>
+          </details>
+
+          <details>
+            <summary>Por que sobe um aviso quando estou no Gerenciador de Tarefas ou em uma tela de Administrador?</summary>
+            <p>Por segurança do próprio Windows (<em>UIPI — User Interface Privilege Isolation</em>), programas que rodam sem privilégio de Administrador não podem interceptar atalhos de teclado enquanto uma janela em modo Administrador está em foco. Para que você nunca fique sem entender o motivo, o Magic Explore detecta automaticamente essa situação e mostra uma cápsula discreta no topo da tela por 3 segundos (sem roubar o foco da sua janela).</p>
+          </details>
+
+          <details>
+            <summary>Como o app sabe a diferença entre 1× Enter e 2× Enter?</summary>
+            <p>Quando o que você digitou corresponde a um aplicativo instalado, <strong>1× Enter</strong> abre o programa imediatamente. Quando não corresponde a nenhum aplicativo, o primeiro <strong>Enter</strong> aguarda uma janela rápida de <strong>280 ms</strong> (o tempo de um duplo clique): se você der só 1 Enter, ele abre o <strong>Windows Explorer</strong> pesquisando o termo no PC todo; se der o 2º Enter dentro desses 280 ms, ele cancela o Explorer e abre o seu navegador padrão pesquisando no <strong>Google</strong>.</p>
+          </details>
+
+          <details>
+            <summary>Como desinstalar o Magic Explore e voltar o Win + Space ao padrão do Windows?</summary>
+            <p>Basta desinstalar pelo painel <strong>Configurações → Aplicativos → Aplicativos instalados</strong> do Windows (ou fechar o ícone da bandeja). O desinstalador remove o registro de inicialização automática, limpa a pasta de configuração e o atalho <strong>Win + Space</strong> volta imediatamente ao comportamento original do Windows.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="./assets/logo.png" alt="Magic Explore" />
+        <span>Magic Explore v1.0.0 · Windows 10 &amp; 11</span>
+      </div>
+      <div class="footer-links">
+        <a href="#simulador">Simulador</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#download">Central de Downloads</a>
+        <a href="https://github.com/conrider3000/MagicExplore" target="_blank" rel="noopener">Código no GitHub</a>
+        <a href="https://github.com/conrider3000/MagicExplore/issues" target="_blank" rel="noopener">Reportar bug</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const sampleApps = [
+        { name: "Firefox", source: "Aplicativo", icon: "🦊" },
+        { name: "Calculadora", source: "Microsoft Store", icon: "🧮" },
+        { name: "Visual Studio Code", source: "Aplicativo", icon: "💻" },
+        { name: "Explorador de Arquivos", source: "Aplicativo do Sistema", icon: "📁" },
+        { name: "Configurações", source: "Microsoft Store", icon: "⚙️" },
+        { name: "Bloco de Notas", source: "Microsoft Store", icon: "📝" },
+        { name: "Spotify", source: "Aplicativo", icon: "🎵" },
+        { name: "WhatsApp", source: "Microsoft Store", icon: "💬" }
+      ];
+
+      const stage = document.getElementById("desktop-stage");
+      const simSpotlight = document.getElementById("sim-spotlight");
+      const viewSearch = document.getElementById("sim-view-search");
+      const viewSettings = document.getElementById("sim-view-settings");
+      const simInput = document.getElementById("sim-input");
+      const resultsBox = document.getElementById("sim-results-box");
+      const resultsList = document.getElementById("sim-results-list");
+      const fallbackBox = document.getElementById("sim-fallback-box");
+      const expQ = document.getElementById("sim-exp-q");
+      const webQ = document.getElementById("sim-web-q");
+
+      const tabSearch = document.getElementById("sim-tab-search");
+      const tabSettings = document.getElementById("sim-tab-settings");
+      const btnOpaque = document.getElementById("sim-btn-opaque");
+      const navOpaqueBtn = document.getElementById("nav-opaque-btn");
+      const simToggleOpaque = document.getElementById("sim-toggle-opaque");
+      const btnAdmin = document.getElementById("sim-btn-admin");
+      const adminPill = document.getElementById("sim-admin-pill");
+      const gearOpen = document.getElementById("sim-gear-open");
+      const backSearch = document.getElementById("sim-back-search");
+      const trayToggle = document.getElementById("sim-tray-toggle");
+
+      const btnSim1x = document.getElementById("btn-sim-1x");
+      const btnSim2x = document.getElementById("btn-sim-2x");
+      const fbExplorer = document.getElementById("sim-fb-explorer");
+      const fbWeb = document.getElementById("sim-fb-web");
+      const kEnter1 = document.getElementById("k-enter1");
+      const kEnter2 = document.getElementById("k-enter2");
+      const simToast = document.getElementById("sim-toast");
+      const simToastText = document.getElementById("sim-toast-text");
+
+      let opaqueOn = false;
+      let adminTimer = null;
+      let enterTimer = null;
+      let currentMatches = [];
+      let selectedIdx = 0;
+
+      function norm(s) {
+        return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+      }
+
+      function flashToast(msg) {
+        simToastText.textContent = msg;
+        simToast.classList.add("flash");
+        setTimeout(() => simToast.classList.remove("flash"), 700);
+      }
+
+      function highlight(name, q) {
+        const nName = norm(name);
+        const nQ = norm(q);
+        const idx = nName.indexOf(nQ);
+        if (!nQ || idx === -1) return name;
+        return (
+          name.slice(0, idx) +
+          "<mark>" +
+          name.slice(idx, idx + nQ.length) +
+          "</mark>" +
+          name.slice(idx + nQ.length)
+        );
+      }
+
+      function renderSimSearch() {
+        const raw = simInput.value;
+        const q = norm(raw);
+        if (!q) {
+          currentMatches = [];
+          resultsBox.style.display = "none";
+          fallbackBox.style.display = "none";
+          return;
+        }
+
+        currentMatches = sampleApps.filter((a) => norm(a.name).includes(q));
+        selectedIdx = 0;
+
+        if (currentMatches.length > 0) {
+          fallbackBox.style.display = "none";
+          resultsBox.style.display = "block";
+          resultsList.innerHTML = currentMatches
+            .map(
+              (app, i) =>
+                '<li class="sim-result-item ' +
+                (i === selectedIdx ? "selected" : "") +
+                '" data-idx="' +
+                i +
+                '">' +
+                '<div class="sim-app-icon">' +
+                app.icon +
+                "</div>" +
+                '<div class="sim-result-meta">' +
+                '<div class="sim-result-name">' +
+                highlight(app.name, raw) +
+                "</div>" +
+                '<div class="sim-result-sub">' +
+                app.source +
+                "</div>" +
+                "</div>" +
+                '<span class="sim-open-tag">↵ Abrir</span>' +
+                "</li>"
+            )
+            .join("");
+        } else {
+          resultsBox.style.display = "none";
+          fallbackBox.style.display = "block";
+          const preview = '"' + raw.trim().slice(0, 28) + '"';
+          expQ.textContent = preview;
+          webQ.textContent = preview;
+        }
+      }
+
+      function showSearchTab() {
+        simSpotlight.classList.remove("closed");
+        viewSettings.style.display = "none";
+        viewSearch.style.display = "block";
+        tabSearch.classList.add("active");
+        tabSettings.classList.remove("active");
+        renderSimSearch();
+      }
+
+      function showSettingsTab() {
+        simSpotlight.classList.remove("closed");
+        viewSearch.style.display = "none";
+        viewSettings.style.display = "block";
+        tabSettings.classList.add("active");
+        tabSearch.classList.remove("active");
+        flashToast("Menu Configurações aberto (mesma estética Apple HIG)");
+      }
+
+      function setOpaqueMode(next) {
+        opaqueOn = next;
+        stage.classList.toggle("opaque-on", opaqueOn);
+        btnOpaque.classList.toggle("active", opaqueOn);
+        btnOpaque.textContent = opaqueOn ? "🌑 Fundo Opaco: ON" : "🌑 Fundo Opaco: OFF";
+        simToggleOpaque.classList.toggle("on", opaqueOn);
+        flashToast(
+          opaqueOn
+            ? "Fundo da tela opaco ATIVADO · Foco total na barra centralizada"
+            : "Fundo da tela opaco DESATIVADO · Modo flutuante transparente"
+        );
+      }
+
+      function triggerAdminToast() {
+        clearTimeout(adminTimer);
+        btnAdmin.classList.add("active");
+        adminPill.classList.add("visible");
+        flashToast("Janela de Administrador detectada · Cápsula exibida sem roubar foco");
+        adminTimer = setTimeout(() => {
+          adminPill.classList.remove("visible");
+          btnAdmin.classList.remove("active");
+        }, 3100);
+      }
+
+      function execute1xEnter() {
+        showSearchTab();
+        const q = simInput.value.trim();
+        if (!q) return;
+        kEnter1.classList.add("pressed");
+        setTimeout(() => kEnter1.classList.remove("pressed"), 220);
+
+        if (currentMatches.length > 0) {
+          const chosen = currentMatches[selectedIdx] || currentMatches[0];
+          flashToast('1× Enter → Abrindo programa "' + chosen.name + '" instantaneamente!');
+        } else {
+          flashToast('1× Enter (sem app) → Abrindo Windows Explorer pesquisando "' + q + '" no PC todo!');
+        }
+      }
+
+      function execute2xEnter() {
+        showSearchTab();
+        const q = simInput.value.trim() || "Magic Explore";
+        kEnter2.classList.add("pressed");
+        setTimeout(() => kEnter2.classList.remove("pressed"), 260);
+        flashToast('2× Enter (duplo Enter ≤ 280ms) → Abrindo Firefox com pesquisa no Google para "' + q + '"!');
+      }
+
+      simInput.addEventListener("input", renderSimSearch);
+      simInput.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown" && currentMatches.length > 0) {
+          e.preventDefault();
+          selectedIdx = (selectedIdx + 1) % currentMatches.length;
+          resultsList.querySelectorAll(".sim-result-item").forEach((el, i) => {
+            el.classList.toggle("selected", i === selectedIdx);
+          });
+        } else if (e.key === "ArrowUp" && currentMatches.length > 0) {
+          e.preventDefault();
+          selectedIdx = (selectedIdx - 1 + currentMatches.length) % currentMatches.length;
+          resultsList.querySelectorAll(".sim-result-item").forEach((el, i) => {
+            el.classList.toggle("selected", i === selectedIdx);
+          });
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (currentMatches.length > 0) {
+            execute1xEnter();
+            return;
+          }
+          if (enterTimer !== null) {
+            clearTimeout(enterTimer);
+            enterTimer = null;
+            execute2xEnter();
+          } else {
+            enterTimer = setTimeout(() => {
+              enterTimer = null;
+              execute1xEnter();
+            }, 280);
+          }
+        }
+      });
+
+      resultsList.addEventListener("click", (e) => {
+        const item = e.target.closest(".sim-result-item");
+        if (!item) return;
+        selectedIdx = Number(item.getAttribute("data-idx")) || 0;
+        execute1xEnter();
+      });
+
+      tabSearch.addEventListener("click", showSearchTab);
+      tabSettings.addEventListener("click", showSettingsTab);
+      gearOpen.addEventListener("click", showSettingsTab);
+      backSearch.addEventListener("click", showSearchTab);
+
+      btnOpaque.addEventListener("click", () => setOpaqueMode(!opaqueOn));
+      simToggleOpaque.addEventListener("click", () => setOpaqueMode(!opaqueOn));
+      navOpaqueBtn.addEventListener("click", () => {
+        document.getElementById("simulador").scrollIntoView({ behavior: "smooth" });
+        setOpaqueMode(!opaqueOn);
+      });
+
+      document.querySelectorAll("[data-sim-toggle]").forEach((btn) => {
+        btn.addEventListener("click", () => btn.classList.toggle("on"));
+      });
+
+      btnAdmin.addEventListener("click", triggerAdminToast);
+      btnSim1x.addEventListener("click", execute1xEnter);
+      btnSim2x.addEventListener("click", execute2xEnter);
+      fbExplorer.addEventListener("click", execute1xEnter);
+      fbWeb.addEventListener("click", execute2xEnter);
+
+      trayToggle.addEventListener("click", () => {
+        const closed = simSpotlight.classList.toggle("closed");
+        flashToast(
+          closed
+            ? "Barra recolhida para a bandeja do sistema (0% CPU)"
+            : "Magic Explore aberto pelo ícone da bandeja no centro da tela"
+        );
+      });
+
+      document.querySelectorAll(".preset-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          showSearchTab();
+          simInput.value = chip.getAttribute("data-query") || "";
+          renderSimSearch();
+          simInput.focus();
+          if (currentMatches.length > 0) {
+            flashToast('Filtrado ao vivo: "' + currentMatches[0].name + '" · Dê 1× Enter para abrir');
+          } else {
+            flashToast('Nenhum app com esse nome · Teste 1× Enter (Explorer) ou 2× Enter (Google)');
+          }
+        });
+      });
+
+      document.querySelectorAll(".copy-hash").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const hash = btn.getAttribute("data-hash");
+          if (navigator.clipboard && hash) {
+            navigator.clipboard.writeText(hash).then(() => {
+              btn.textContent = "Copiado!";
+              setTimeout(() => { btn.textContent = "Copiar"; }, 1600);
+            });
+          }
+        });
+      });
+
+      renderSimSearch();
+    })();
+  </script>
+</body>
+</html>
