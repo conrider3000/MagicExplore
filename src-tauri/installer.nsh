@@ -1,4 +1,9 @@
 !macro NSIS_HOOK_PREINSTALL
+  ; Encerra qualquer instância anterior do Magic Explore em execução na bandeja
+  nsExec::ExecToLog 'taskkill /F /IM "Magic Explore.exe"'
+  nsExec::ExecToLog 'taskkill /F /IM "magic-explore.exe"'
+  nsExec::ExecToLog 'taskkill /F /IM "Magic_Explore_Portable.exe"'
+
   CreateDirectory "$INSTDIR"
   CreateDirectory "$APPDATA\Magic Explore"
 
@@ -13,8 +18,11 @@
 !macro NSIS_HOOK_POSTINSTALL
   CreateDirectory "$APPDATA\Magic Explore"
 
-  ; Ativa iniciar junto com o Windows por padrão
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MagicExplore" '"$INSTDIR\Magic Explore.exe"'
+  ; Ativa iniciar junto com o Windows por padrão (com --autostart para abrir silencioso no boot)
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MagicExplore" '"$INSTDIR\Magic Explore.exe" --autostart'
+
+  ; Atualiza o cache de ícones do Windows Explorer para exibir a nova logo imediatamente
+  nsExec::ExecToLog 'ie4uinit.exe -show'
 
   ; Se ainda não houver configuração salva, solicita autorização para substituir Win + Space
   IfFileExists "$APPDATA\Magic Explore\config.json" skip_consent 0
@@ -43,6 +51,8 @@
 !macroend
 
 !macro NSIS_HOOK_POSTUNINSTALL
+  nsExec::ExecToLog 'taskkill /F /IM "Magic Explore.exe"'
+  nsExec::ExecToLog 'taskkill /F /IM "magic-explore.exe"'
   DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MagicExplore"
   RMDir /r "$APPDATA\Magic Explore"
 !macroend

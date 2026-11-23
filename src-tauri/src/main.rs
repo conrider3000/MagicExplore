@@ -13,9 +13,12 @@ use config::{
 };
 use serde::Serialize;
 use std::collections::HashMap;
+use std::os::windows::process::CommandExt;
+use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{mpsc, Mutex};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use tauri::image::Image;
 use tauri::menu::{Menu, MenuItem, PredefinedMenuItem};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::{AppHandle, Emitter, LogicalSize, Manager, Size, State, WebviewWindow, WindowEvent};
@@ -23,6 +26,9 @@ use window_vibrancy::apply_acrylic;
 use windows::core::HSTRING;
 use windows::Win32::Foundation::{GetLastError, ERROR_ALREADY_EXISTS};
 use windows::Win32::System::Threading::CreateMutexW;
+
+const CREATE_NO_WINDOW: u32 = 0x08000000;
+const EMBEDDED_APP_ICON: &[u8] = include_bytes!("../icons/128x128.png");
 
 struct AppState {
     config: Mutex<AppConfig>,
@@ -63,6 +69,11 @@ fn get_hwnd(win: &WebviewWindow) -> Option<isize> {
     win.hwnd().ok().map(|h| h.0 as isize)
 }
 
+fn anchor_bar_physical_height(win: &WebviewWindow) -> i32 {
+    let scale = win.scale_factor().unwrap_or(1.0);
+    (64.0 * scale).round() as i32
+}
+
 fn sync_backdrop_window(app: &AppHandle, show: bool) {
     let Some(backdrop_win) = app.get_webview_window("backdrop") else {
         return;
@@ -95,11 +106,15 @@ fn show_main_bar(app: &AppHandle, open_settings: bool) {
         cfg.opaque_backdrop
     };
 
+    let bar_phys_h = anchor_bar_physical_height(&win);
+    if let Some(hwnd) = get_hwnd(&win) {
+        win32_hooks::center_hwnd_on_active_monitor(hwnd, bar_phys_h);
+    }
+
     let _ = win.show();
-    let _ = win.center();
 
     if let Some(hwnd) = get_hwnd(&win) {
-        win32_hooks::center_hwnd_on_active_monitor(hwnd);
+        win32_hooks::center_hwnd_on_active_monitor(hwnd, bar_phys_h);
         win32_hooks::apply_window_rounding(hwnd, 18);
     }
 
@@ -199,9 +214,10 @@ fn refresh_apps(app: AppHandle, state: State<'_, AppState>) -> usize {
 fn set_window_height(app: AppHandle, height: f64) {
     let clamped = height.clamp(64.0, 560.0);
     if let Some(win) = app.get_webview_window("main") {
+        let bar_phys_h = anchor_bar_physical_height(&win);
         let _ = win.set_size(Size::Logical(LogicalSize::new(680.0, clamped)));
         if let Some(hwnd) = get_hwnd(&win) {
-            win32_hooks::center_hwnd_on_active_monitor(hwnd);
+            win32_hooks::center_hwnd_on_active_monitor(hwnd, bar_phys_h);
             win32_hooks::apply_window_rounding(hwnd, 18);
         }
     }
@@ -328,6 +344,17 @@ fn respond_initial_consent(
     Ok(())
 }
 
+fn terminate_previous_instances() {
+    let my_pid = std::process::id();
+    let filter = format!("PID ne {}", my_pid);
+    for exe_name in ["Magic Explore.exe", "magic-explore.exe", "Magic_Explore_Portable.exe"] {
+        let _ = Command::new("taskkill.exe")
+            .args(["/F", "/FI", &filter, "/IM", exe_name])
+            .creation_flags(CREATE_NO_WINDOW)
+            .output();
+    }
+}
+
 fn ensure_single_instance() -> bool {
     let name = HSTRING::from("Local\\MagicExploreSingleInstanceMutex");
     unsafe {
@@ -340,10 +367,12 @@ fn ensure_single_instance() -> bool {
 }
 
 fn main() {
+    terminate_previous_instances();
     if !ensure_single_instance() {
         return;
     }
 
+    let is_autostart_launch = std::env::args().any(|a| a == "--autostart");
     let initial_cfg = load_config();
     let cached = load_cached_apps();
     let initial_apps = if cached.is_empty() {
@@ -400,8 +429,12 @@ fn main() {
         })
         .setup(move |app| {
             let app_handle = app.handle().clone();
+            let embedded_icon = Image::from_bytes(EMBEDDED_APP_ICON).ok();
 
             if let Some(main_win) = app.get_webview_window("main") {
+                if let Some(ref ic) = embedded_icon {
+                    let _ = main_win.set_icon(ic.clone());
+                }
                 let _ = apply_acrylic(&main_win, Some((20, 20, 25, 175)));
                 if let Some(hwnd) = get_hwnd(&main_win) {
                     win32_hooks::apply_window_rounding(hwnd, 18);
@@ -450,8 +483,8 @@ fn main() {
                     }
                 });
 
-            if let Some(icon) = app.default_window_icon().cloned() {
-                tray_builder = tray_builder.icon(icon);
+            if let Some(ic) = embedded_icon.or_else(|| app.default_window_icon().cloned()) {
+                tray_builder = tray_builder.icon(ic);
             }
             tray_builder.build(app)?;
 
@@ -545,7 +578,7 @@ fn main() {
 
             trigger_background_app_refresh(app_handle.clone());
 
-            if !initial_cfg.consent_asked {
+            if !initial_cfg.consent_asked || !is_autostart_launch {
                 show_main_bar(&app_handle, false);
             }
 

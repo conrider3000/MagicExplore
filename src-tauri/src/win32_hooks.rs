@@ -433,9 +433,10 @@ pub fn hide_hwnd(hwnd_raw: isize) {
     }
 }
 
-/// Centers `main_hwnd` horizontally and vertically on the active cursor monitor
-/// using actual physical dimensions after DPI scaling.
-pub fn center_hwnd_on_active_monitor(main_hwnd_raw: isize) {
+/// Positions `main_hwnd` horizontally centered on the active cursor monitor,
+/// while anchoring its top `y` coordinate to the fixed 64px search bar center
+/// (`anchor_bar_phys_h`) so expanding the dropdown list grows strictly downwards.
+pub fn center_hwnd_on_active_monitor(main_hwnd_raw: isize, anchor_bar_phys_h: i32) {
     let hwnd = HWND(main_hwnd_raw as *mut _);
     unsafe {
         let mut pt = POINT::default();
@@ -449,13 +450,13 @@ pub fn center_hwnd_on_active_monitor(main_hwnd_raw: isize) {
             let mut rc = RECT::default();
             let _ = GetWindowRect(hwnd, &mut rc);
             let phys_w = (rc.right - rc.left).max(300);
-            let phys_h = (rc.bottom - rc.top).max(60);
+            let bar_h = anchor_bar_phys_h.max(64);
             let work = mi.rcWork;
             let work_w = work.right - work.left;
             let work_h = work.bottom - work.top;
 
             let x = work.left + (work_w - phys_w) / 2;
-            let y = work.top + (work_h - phys_h) / 2;
+            let y = work.top + (work_h - bar_h) / 2;
             let _ = SetWindowPos(
                 hwnd,
                 HWND_TOPMOST,

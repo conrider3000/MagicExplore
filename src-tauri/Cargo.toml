@@ -1,6 +1,6 @@
 [package]
 name = "magic-explore"
-version = "1.0.0"
+version = "1.1.0"
 description = "Magic Explore — Barra de busca flutuante estilo Apple Spotlight para Windows 10 e 11"
 authors = ["Magic Explore"]
 edition = "2021"

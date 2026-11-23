@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magic Explore v1.0 — Busca Flutuante Estilo Apple Spotlight para Windows 10 e 11</title>
-  <meta name="description" content="Barra de busca flutuante ultraleve estilo Apple HIG para Windows 10 e 11. Abra aplicativos ao vivo com Win + Space, pesquise arquivos no Explorer com 1× Enter ou busque no Google com 2× Enter." />
-  <meta name="theme-color" content="#080a10" />
+  <title>Magic Explore — Busca Flutuante para Windows 10 e 11</title>
+  <meta name="description" content="Barra de busca flutuante ultraleve para Windows 10 e 11. Abra aplicativos ao vivo com Win + Space, pesquise arquivos no Explorer com 1× Enter ou busque no Google com 2× Enter." />
+  <meta name="theme-color" content="#07080d" />
 
   <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Magic Explore v1.0 — Busca Flutuante Estilo Apple para Windows" />
-  <meta property="og:description" content="Pressione Win + Space para abrir uma barra centralizada instantânea: aplicativos ao vivo, busca em todo o PC com 1× Enter e pesquisa no Google com 2× Enter." />
+  <meta property="og:title" content="Magic Explore — Busca Flutuante para Windows" />
+  <meta property="og:description" content="Win + Space no centro da tela: aplicativos ao vivo, busca em todo o PC com 1× Enter e pesquisa no Google com 2× Enter." />
   <meta property="og:image" content="./assets/logo.png" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Magic Explore v1.0 — Busca Flutuante Estilo Apple para Windows" />
-  <meta name="twitter:description" content="Launcher ultraleve estilo Spotlight para Windows 10 e 11 com 1× Enter (Apps/Explorer) e 2× Enter (Google)." />
+  <meta name="twitter:title" content="Magic Explore — Busca Flutuante para Windows" />
+  <meta name="twitter:description" content="Launcher ultraleve para Windows 10 e 11 com 1× Enter (Apps/Explorer) e 2× Enter (Google)." />
   <meta name="twitter:image" content="./assets/logo.png" />
 
   <link rel="icon" type="image/x-icon" href="./assets/icon.ico" />
@@ -27,17 +27,16 @@
   <style>
     :root {
       --bg: #07080d;
-      --bg-elevated: #0e1018;
-      --surface: #131622;
-      --surface-hover: #191d2d;
-      --glass: rgba(24, 25, 34, 0.78);
+      --bg-elevated: #0d1018;
+      --surface: #121622;
+      --surface-hover: #181d2c;
       --border: rgba(255, 255, 255, 0.085);
       --border-strong: rgba(255, 255, 255, 0.16);
       --text: #f5f5f7;
       --text-secondary: #9da4b8;
-      --text-muted: #697086;
+      --text-muted: #687086;
       --blue: #0a84ff;
-      --blue-bright: #47a3ff;
+      --blue-bright: #4da6ff;
       --blue-soft: rgba(10, 132, 255, 0.14);
       --blue-border: rgba(10, 132, 255, 0.36);
       --purple: #7c4dff;
@@ -46,9 +45,8 @@
       --gold-border: rgba(255, 200, 61, 0.34);
       --green: #30d158;
       --amber: #ff9f0a;
-      --red: #ff5f57;
       --radius-lg: 22px;
-      --radius-md: 15px;
+      --radius-md: 16px;
       --radius-sm: 10px;
     }
 
@@ -66,9 +64,9 @@
       font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", sans-serif;
       background-color: var(--bg);
       background-image:
-        radial-gradient(1050px 540px at 50% -130px, rgba(10, 132, 255, 0.22), transparent 68%),
-        radial-gradient(640px 440px at 84% 16%, rgba(124, 77, 255, 0.13), transparent 65%),
-        radial-gradient(520px 380px at 16% 24%, rgba(255, 200, 61, 0.07), transparent 65%);
+        radial-gradient(1000px 520px at 50% -120px, rgba(10, 132, 255, 0.22), transparent 68%),
+        radial-gradient(620px 420px at 84% 16%, rgba(124, 77, 255, 0.12), transparent 65%),
+        radial-gradient(500px 360px at 16% 24%, rgba(255, 200, 61, 0.06), transparent 65%);
       color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -92,64 +90,65 @@
       padding: 0 24px;
     }
 
-    /* Sticky Glass Header */
+    /* Clean Single-Line Sticky Header */
     header {
       position: sticky;
       top: 0;
       z-index: 60;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      background: rgba(7, 8, 13, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(7, 8, 13, 0.8);
       border-bottom: 1px solid var(--border);
     }
 
     .nav {
-      height: 70px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      height: 68px;
+      display: flex;
       align-items: center;
-      gap: 20px;
+      justify-content: space-between;
+      gap: 24px;
     }
 
     .brand {
-      justify-self: start;
       display: inline-flex;
       align-items: center;
-      gap: 11px;
+      gap: 10px;
       font-weight: 800;
-      font-size: 1.1rem;
-      letter-spacing: -0.025em;
+      font-size: 1.06rem;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .brand img {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       object-fit: contain;
-      filter: drop-shadow(0 4px 12px rgba(10, 132, 255, 0.35));
+      filter: drop-shadow(0 4px 10px rgba(10, 132, 255, 0.35));
     }
 
     .brand-tag {
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       padding: 2px 7px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.07);
       border: 1px solid var(--border);
       color: var(--text-secondary);
     }
 
     .nav-center {
-      justify-self: center;
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 28px;
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--text-secondary);
     }
 
     .nav-center a {
+      white-space: nowrap;
       transition: color 0.16s ease;
     }
 
@@ -158,23 +157,24 @@
     }
 
     .nav-actions {
-      justify-self: end;
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-shrink: 0;
     }
 
     .btn-ghost {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
+      gap: 7px;
+      padding: 8px 13px;
       border-radius: var(--radius-sm);
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 600;
       color: var(--text-secondary);
       border: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.03);
+      white-space: nowrap;
       transition: all 0.16s ease;
     }
 
@@ -187,14 +187,15 @@
     .btn-nav-cta {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 16px;
+      gap: 7px;
+      padding: 8px 16px;
       border-radius: var(--radius-sm);
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: #ffffff;
       background: linear-gradient(180deg, #1f93ff 0%, #0071e3 100%);
-      box-shadow: 0 6px 18px rgba(10, 132, 255, 0.3);
+      box-shadow: 0 6px 18px rgba(10, 132, 255, 0.28);
+      white-space: nowrap;
       transition: transform 0.14s ease, filter 0.16s ease;
     }
 
@@ -205,7 +206,7 @@
 
     /* Hero Section */
     .hero {
-      padding: 48px 0 44px;
+      padding: 46px 0 36px;
       text-align: center;
     }
 
@@ -213,7 +214,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0 auto 20px;
+      margin: 0 auto 18px;
       position: relative;
       width: fit-content;
     }
@@ -221,10 +222,10 @@
     .hero-logo-wrap::before {
       content: "";
       position: absolute;
-      width: 240px;
-      height: 240px;
+      width: 230px;
+      height: 230px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(10, 132, 255, 0.25) 0%, rgba(255, 200, 61, 0.12) 42%, transparent 70%);
+      background: radial-gradient(circle, rgba(10, 132, 255, 0.24) 0%, rgba(255, 200, 61, 0.11) 44%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -232,11 +233,11 @@
     .hero-logo {
       position: relative;
       z-index: 1;
-      width: 168px;
-      height: 168px;
+      width: 156px;
+      height: 156px;
       display: block;
       object-fit: contain;
-      filter: drop-shadow(0 18px 38px rgba(10, 132, 255, 0.42));
+      filter: drop-shadow(0 18px 36px rgba(10, 132, 255, 0.4));
       animation: floatLogo 5s ease-in-out infinite;
     }
 
@@ -254,10 +255,9 @@
       background: var(--blue-soft);
       border: 1px solid var(--blue-border);
       color: #8cc8ff;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .hero-badge .dot {
@@ -269,12 +269,12 @@
     }
 
     h1 {
-      font-size: clamp(2.25rem, 5vw, 3.65rem);
+      font-size: clamp(2.2rem, 4.8vw, 3.55rem);
       font-weight: 800;
       line-height: 1.08;
       letter-spacing: -0.035em;
-      max-width: 820px;
-      margin: 0 auto 20px;
+      max-width: 800px;
+      margin: 0 auto 18px;
     }
 
     h1 .accent {
@@ -285,26 +285,26 @@
     }
 
     .hero-subtitle {
-      max-width: 670px;
-      margin: 0 auto 30px;
+      max-width: 650px;
+      margin: 0 auto 28px;
       color: var(--text-secondary);
-      font-size: 1.11rem;
-      font-weight: 400;
+      font-size: 1.08rem;
     }
 
     kbd {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 2px 9px;
+      padding: 2px 8px;
       font-family: "JetBrains Mono", "Segoe UI", monospace;
-      font-size: 0.85em;
+      font-size: 0.84em;
       font-weight: 700;
       color: #ffffff;
       background: #1b2030;
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-bottom-width: 3px;
       border-radius: 7px;
+      white-space: nowrap;
       transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
     }
 
@@ -319,8 +319,8 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 13px;
-      margin-bottom: 22px;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
     .btn-primary {
@@ -328,21 +328,22 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 15px 28px;
+      padding: 14px 26px;
       border-radius: 14px;
       background: linear-gradient(180deg, #1f93ff 0%, #0071e3 100%);
       color: #ffffff;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.98rem;
       border: 1px solid rgba(120, 192, 255, 0.38);
-      box-shadow: 0 14px 34px rgba(10, 132, 255, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+      box-shadow: 0 14px 34px rgba(10, 132, 255, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+      white-space: nowrap;
       transition: transform 0.15s ease, box-shadow 0.18s ease, filter 0.18s ease;
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
       filter: brightness(1.06);
-      box-shadow: 0 18px 40px rgba(10, 132, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+      box-shadow: 0 18px 40px rgba(10, 132, 255, 0.44);
     }
 
     .btn-primary img {
@@ -356,13 +357,14 @@
       align-items: center;
       justify-content: center;
       gap: 9px;
-      padding: 15px 24px;
+      padding: 14px 22px;
       border-radius: 14px;
       background: var(--surface);
       border: 1px solid var(--border-strong);
       color: var(--text);
       font-weight: 600;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
+      white-space: nowrap;
       transition: background 0.16s ease, border-color 0.16s ease, transform 0.14s ease;
     }
 
@@ -376,10 +378,10 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px 24px;
-      font-size: 0.85rem;
+      gap: 10px 22px;
+      font-size: 0.84rem;
       color: var(--text-muted);
-      margin-bottom: 44px;
+      margin-bottom: 40px;
     }
 
     .trust-strip span {
@@ -392,7 +394,7 @@
       color: var(--blue-bright);
     }
 
-    /* Interactive Playground Simulator */
+    /* Interactive Live Spotlight Sandbox */
     .playground {
       width: 100%;
       margin: 0 auto;
@@ -471,32 +473,29 @@
       color: #ffd180;
     }
 
-    /* Simulated Windows 11 Desktop Stage */
     .desktop-stage {
       position: relative;
       width: 100%;
-      min-height: 410px;
+      min-height: 420px;
       border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.11);
       background:
         radial-gradient(circle at 22% 28%, rgba(10, 132, 255, 0.34) 0%, transparent 45%),
         radial-gradient(circle at 78% 65%, rgba(124, 77, 255, 0.3) 0%, transparent 48%),
         linear-gradient(135deg, #0d1528 0%, #11182c 50%, #0a0f1d 100%);
-      padding: 26px 20px 62px;
+      padding: 112px 20px 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       overflow: hidden;
-      transition: background 0.3s ease;
     }
 
-    /* Fake Desktop Background Window (to show transparency vs opaque backdrop) */
     .fake-desktop-card {
       position: absolute;
-      top: 28px;
-      left: 28px;
-      width: 220px;
+      top: 26px;
+      left: 26px;
+      width: 210px;
       padding: 12px 14px;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.06);
@@ -504,7 +503,6 @@
       font-size: 0.72rem;
       color: rgba(255, 255, 255, 0.55);
       pointer-events: none;
-      transition: opacity 0.25s ease;
     }
 
     .fake-desktop-card .fake-lines {
@@ -521,7 +519,6 @@
       background: rgba(255, 255, 255, 0.14);
     }
 
-    /* Opaque Backdrop Overlay inside Simulator */
     .sim-opaque-overlay {
       position: absolute;
       inset: 0;
@@ -536,7 +533,6 @@
       opacity: 0.97;
     }
 
-    /* Simulated Admin Toast Pill */
     .sim-admin-pill {
       position: absolute;
       top: 14px;
@@ -578,7 +574,6 @@
       box-shadow: 0 0 8px var(--amber);
     }
 
-    /* Simulated Magic Explore Bar */
     .sim-spotlight {
       position: relative;
       z-index: 6;
@@ -623,7 +618,7 @@
       outline: none;
       color: #f5f5f7;
       font-family: inherit;
-      font-size: 1.08rem;
+      font-size: 1.06rem;
       caret-color: var(--blue);
     }
 
@@ -751,7 +746,6 @@
       opacity: 1;
     }
 
-    /* Simulator Fallback Panel (1x Enter Explorer vs 2x Enter Google) */
     .sim-fallback {
       padding: 8px;
       display: flex;
@@ -819,7 +813,6 @@
       color: rgba(235, 235, 245, 0.6);
     }
 
-    /* Simulator Settings View */
     .sim-settings {
       padding: 12px 16px 16px;
       display: flex;
@@ -910,7 +903,6 @@
       transform: translateX(17px);
     }
 
-    /* Simulated Windows 11 Taskbar at bottom of stage */
     .sim-taskbar {
       position: absolute;
       left: 0;
@@ -954,7 +946,6 @@
       object-fit: contain;
     }
 
-    /* Quick Preset Chips */
     .preset-row {
       display: flex;
       flex-wrap: wrap;
@@ -1060,243 +1051,371 @@
 
     /* Section Headings */
     section.block {
-      padding: 80px 0 12px;
+      padding: 84px 0 12px;
     }
 
     .section-head {
       text-align: center;
-      max-width: 660px;
-      margin: 0 auto 42px;
+      max-width: 680px;
+      margin: 0 auto 44px;
     }
 
     .section-kicker {
       display: inline-block;
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--blue-bright);
+      color: var(--gold);
       margin-bottom: 10px;
     }
 
     .section-head h2 {
-      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      font-size: clamp(1.8rem, 3.3vw, 2.5rem);
       font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.16;
+      letter-spacing: -0.028em;
+      line-height: 1.15;
       margin-bottom: 12px;
     }
 
     .section-head p {
       color: var(--text-secondary);
-      font-size: 1rem;
+      font-size: 1.02rem;
     }
 
-    /* Problem vs Solution (Cookies & Coffee structural inspiration) */
-    .vs-grid {
+    /* Exclusive Section 1: "A Regra do Enter" (3 Interactive Routing Cards) */
+    .enter-anatomy {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px;
     }
 
-    .vs-card {
-      background: var(--bg-elevated);
+    .route-card {
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 28px;
+      padding: 26px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
 
-    .vs-card.good {
-      background: linear-gradient(160deg, rgba(10, 132, 255, 0.13) 0%, var(--surface) 60%);
+    .route-card:hover {
       border-color: var(--blue-border);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      transform: translateY(-3px);
     }
 
-    .vs-tag {
+    .route-card.web-route:hover {
+      border-color: var(--gold-border);
+    }
+
+    .route-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .route-kbd {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9px;
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 16px;
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      color: #a8d5ff;
     }
 
-    .vs-card.good .vs-tag {
+    .route-card.web-route .route-kbd {
+      background: var(--gold-soft);
+      border-color: var(--gold-border);
       color: var(--gold);
     }
 
-    .vs-list {
-      list-style: none;
+    .route-timing {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.73rem;
+      color: var(--text-muted);
+    }
+
+    .route-card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.015em;
+    }
+
+    .route-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    .route-visual {
+      padding: 14px;
+      border-radius: 13px;
+      background: rgba(7, 8, 13, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      font-size: 0.8rem;
       display: flex;
       flex-direction: column;
-      gap: 13px;
+      gap: 8px;
+    }
+
+    .mini-typing {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mini-result {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(10, 132, 255, 0.22);
+      border: 1px solid rgba(10, 132, 255, 0.35);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.79rem;
+    }
+
+    .route-card.exp-route .mini-result {
+      background: rgba(255, 191, 46, 0.15);
+      border-color: rgba(255, 191, 46, 0.32);
+      color: #ffe08a;
+    }
+
+    .route-card.web-route .mini-result {
+      background: rgba(124, 77, 255, 0.2);
+      border-color: rgba(124, 77, 255, 0.4);
+      color: #decfff;
+    }
+
+    /* Exclusive Section 2: Visual Engineering Showcases (3 Rich Interactive Cards) */
+    .showcase-stack {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .craft-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .craft-card.span-7 {
+      grid-column: span 7;
+    }
+
+    .craft-card.span-5 {
+      grid-column: span 5;
+    }
+
+    .craft-card.span-12 {
+      grid-column: span 12;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .craft-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--blue-bright);
+      margin-bottom: 10px;
+    }
+
+    .craft-card h3 {
+      font-size: 1.32rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .craft-card p {
       font-size: 0.94rem;
       color: var(--text-secondary);
     }
 
-    .vs-card.good .vs-list {
-      color: var(--text);
-    }
-
-    .vs-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .vs-icon {
-      font-weight: 800;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .vs-icon.bad {
-      color: var(--red);
-    }
-
-    .vs-icon.ok {
-      color: var(--green);
-    }
-
-    /* 4 Steps Grid */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .step-card {
-      min-width: 0;
+    /* Visual widget inside Craft Card A: Win + Space Hook & Conflict Guard */
+    .hook-diagram {
+      padding: 18px;
+      border-radius: 14px;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 24px 22px;
-      transition: border-color 0.18s ease, transform 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .step-card:hover {
-      border-color: var(--blue-border);
-      transform: translateY(-2px);
+    .hook-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.83rem;
     }
 
-    .step-num {
+    .hook-status {
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: #8cc8ff;
-      background: var(--blue-soft);
-      border: 1px solid var(--blue-border);
-      display: inline-flex;
-      padding: 4px 10px;
+      font-size: 0.73rem;
+      padding: 3px 9px;
       border-radius: 999px;
-      margin-bottom: 14px;
+      background: rgba(48, 209, 88, 0.14);
+      border: 1px solid rgba(48, 209, 88, 0.35);
+      color: #79f297;
+      white-space: nowrap;
     }
 
-    .step-card h3 {
-      font-size: 1.04rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .hook-status.warn {
+      background: rgba(255, 159, 10, 0.15);
+      border-color: rgba(255, 159, 10, 0.35);
+      color: #ffc66d;
     }
 
-    .step-card p {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-
-    /* Bento Features */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .feature-card {
-      min-width: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      transition: border-color 0.18s ease, transform 0.18s ease;
-    }
-
-    .feature-card:hover {
-      border-color: var(--blue-border);
-      transform: translateY(-2px);
-    }
-
-    .feature-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 11px;
-      background: var(--blue-soft);
-      border: 1px solid var(--blue-border);
-      display: inline-flex;
+    /* Visual widget inside Craft Card B: Opaque vs Glass Interactive Preview */
+    .backdrop-compare {
+      padding: 18px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(10, 132, 255, 0.35), transparent 55%),
+        linear-gradient(135deg, #111b33 0%, #0b1020 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+      min-height: 175px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: var(--blue-bright);
-      margin-bottom: 16px;
+      gap: 14px;
     }
 
-    .feature-card h3 {
-      font-size: 1.04rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .backdrop-compare.is-opaque::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #07080c;
+      z-index: 1;
     }
 
-    .feature-card p {
-      font-size: 0.91rem;
-      color: var(--text-secondary);
-    }
-
-    /* Comparison Table (Open Vynil Ripper structural inspiration) */
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-md);
-      background: var(--surface);
-    }
-
-    table {
+    .mini-bar-preview {
+      position: relative;
+      z-index: 2;
       width: 100%;
-      border-collapse: collapse;
-      min-width: 680px;
+      max-width: 310px;
+      height: 46px;
+      padding: 0 14px;
+      border-radius: 12px;
+      background: rgba(26, 27, 35, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #ffffff;
     }
 
-    th, td {
-      padding: 15px 20px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.91rem;
+    .mini-bar-preview img {
+      width: 20px;
+      height: 20px;
     }
 
-    th {
-      background: var(--bg-elevated);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-secondary);
-    }
-
-    th.highlight-col {
-      color: var(--gold);
-      background: rgba(10, 132, 255, 0.14);
-    }
-
-    td.status-no {
-      color: var(--text-muted);
-    }
-
-    td.status-yes {
-      color: #a3d4ff;
+    .mini-switch-btn {
+      position: relative;
+      z-index: 2;
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+      font-size: 0.76rem;
       font-weight: 600;
-      background: rgba(10, 132, 255, 0.05);
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    /* Visual widget inside Craft Card C: Admin Island Showcase */
+    .admin-showcase-box {
+      padding: 22px;
+      border-radius: 15px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .static-island-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(24, 24, 29, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      font-size: 0.84rem;
+      color: #f5f5f7;
+    }
+
+    .static-island-pill img {
+      width: 19px;
+      height: 19px;
+    }
+
+    .static-island-pill .amber-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    .fake-taskmgr {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
 
     /* Download Hub */
@@ -1467,7 +1586,7 @@
       padding: 18px 22px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       font-size: 0.9rem;
       color: var(--text-secondary);
     }
@@ -1573,17 +1692,17 @@
 
     /* Responsive */
     @media (max-width: 920px) {
-      .nav {
-        display: flex;
-        justify-content: space-between;
-      }
       .nav-center {
         display: none;
       }
-      .vs-grid,
-      .steps-grid,
-      .bento-grid,
+      .enter-anatomy,
       .download-grid {
+        grid-template-columns: 1fr;
+      }
+      .craft-card.span-7,
+      .craft-card.span-5,
+      .craft-card.span-12 {
+        grid-column: span 12;
         grid-template-columns: 1fr;
       }
       .fake-desktop-card {
@@ -1596,8 +1715,8 @@
         padding: 0 16px;
       }
       .hero-logo {
-        width: 132px;
-        height: 132px;
+        width: 128px;
+        height: 128px;
       }
       .hero-cta {
         flex-direction: column;
@@ -1622,15 +1741,12 @@
       <a class="brand" href="#">
         <img src="./assets/logo.png" alt="Logo Magic Explore" />
         <span>Magic Explore</span>
-        <span class="brand-tag">v1.0</span>
       </a>
 
       <nav class="nav-center" aria-label="Navegação principal">
         <a href="#simulador">Simulador</a>
-        <a href="#problema">Por que usar</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#recursos">Recursos</a>
-        <a href="#comparativo">Comparativo</a>
+        <a href="#regra-do-enter">Como funciona</a>
+        <a href="#engenharia">Recursos</a>
         <a href="#download">Download</a>
         <a href="#faq">Dúvidas</a>
       </nav>
@@ -1640,11 +1756,8 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.08 11.08 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.07.78 2.16 0 1.56-.01 2.82-.01 3.2 0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
           <span>GitHub</span>
         </a>
-        <button type="button" class="btn-ghost" id="nav-opaque-btn">
-          🌑 Testar Fundo Opaco
-        </button>
         <a class="btn-nav-cta" href="#download">
-          ⬇ Baixar v1.0
+          Baixar
         </a>
       </div>
     </div>
@@ -1655,29 +1768,24 @@
     <section class="hero">
       <div class="container">
         <div class="hero-logo-wrap">
-          <img class="hero-logo" src="./assets/logo.png" alt="Magic Explore — Lupa Mágica com Brilhos Dourados" />
-        </div>
-
-        <div class="hero-badge">
-          <span class="dot"></span>
-          Versão 1.0.0 · Windows 10 &amp; 11 (64-bit) · Estética Apple HIG · 100% Gratuito
+          <img class="hero-logo" src="./assets/logo.png" alt="Magic Explore" />
         </div>
 
         <h1>
-          Sua busca flutuante no Windows <span class="accent">com a magia e leveza do Spotlight.</span>
+          Sua busca flutuante no Windows <span class="accent">rápida, limpa e direto ao ponto.</span>
         </h1>
 
         <p class="hero-subtitle">
-          O <strong>Magic Explore</strong> fica silenciosamente no cantinho da barra do Windows. Pressione <kbd id="hero-k1">Win</kbd> + <kbd id="hero-k2">Space</kbd> para abrir uma barra centralizada instantânea: filtre aplicativos ao vivo, pesquise arquivos no computador todo com <kbd>1× Enter</kbd> ou busque direto no Google com <kbd>2× Enter</kbd>.
+          O <strong>Magic Explore</strong> fica silenciosamente no cantinho da barra do Windows. Pressione <kbd>Win</kbd> + <kbd>Space</kbd> para abrir uma barra centralizada instantânea: filtre aplicativos ao vivo, pesquise arquivos no computador todo com <kbd>1× Enter</kbd> ou busque direto no Google com <kbd>2× Enter</kbd>.
         </p>
 
         <div class="hero-cta">
-          <a class="btn-primary" href="./downloads/Magic_Explore_v1.0_Setup.exe" download="Magic_Explore_v1.0_Setup.exe">
+          <a class="btn-primary" href="./downloads/Magic_Explore_v1.0_Setup.exe" download="Magic_Explore_Setup.exe">
             <img src="./assets/logo.png" alt="" />
-            Baixar Instalador v1.0 (.exe)
+            Baixar para Windows
           </a>
           <a class="btn-secondary" href="#download">
-            Versão Portátil &amp; SHA-256
+            Versão Portátil
           </a>
         </div>
 
@@ -1716,7 +1824,6 @@
           </div>
 
           <div class="desktop-stage" id="desktop-stage">
-            <!-- Fake background desktop window to contrast transparency vs opaque mode -->
             <div class="fake-desktop-card">
               <strong>Área de Trabalho · Windows 11</strong>
               <div class="fake-lines">
@@ -1726,10 +1833,8 @@
               </div>
             </div>
 
-            <!-- Optional Fullscreen Opaque Overlay -->
             <div class="sim-opaque-overlay" id="sim-opaque-overlay"></div>
 
-            <!-- Admin Mode Floating Pill -->
             <div class="sim-admin-pill" id="sim-admin-pill">
               <img src="./assets/logo.png" alt="" />
               <span class="amber-dot"></span>
@@ -1738,9 +1843,7 @@
               <span>Win + Space pausado nesta janela</span>
             </div>
 
-            <!-- Floating Spotlight Shell -->
             <div class="sim-spotlight" id="sim-spotlight">
-              <!-- Search Mode -->
               <div id="sim-view-search">
                 <div class="sim-search-row">
                   <img src="./assets/logo.png" alt="Magic Explore" />
@@ -1787,7 +1890,6 @@
                 </div>
               </div>
 
-              <!-- Settings Mode -->
               <div id="sim-view-settings" style="display: none;">
                 <div class="sim-settings-head">
                   <button type="button" class="sim-back-btn" id="sim-back-search">← Voltar</button>
@@ -1795,7 +1897,7 @@
                     <img src="./assets/logo.png" alt="" />
                     <span>Configurações · Magic Explore</span>
                   </div>
-                  <span style="color: rgba(255,255,255,0.4); font-size: 0.72rem;">v1.0</span>
+                  <span></span>
                 </div>
                 <div class="sim-divider"></div>
                 <div class="sim-settings">
@@ -1831,20 +1933,18 @@
               </div>
             </div>
 
-            <!-- Simulated Windows 11 Taskbar -->
             <div class="sim-taskbar">
-              <span>Windows 11 Desktop · Monitor Principal (Centralizado)</span>
+              <span>Windows 11 Desktop · Barra Centralizada</span>
               <div class="sim-tray">
                 <button type="button" class="sim-tray-btn" id="sim-tray-toggle" title="Clique para abrir/fechar na bandeja">
                   <img src="./assets/logo.png" alt="" />
                   <span>Magic Explore na Bandeja</span>
                 </button>
-                <span>19:05</span>
+                <span>19:30</span>
               </div>
             </div>
           </div>
 
-          <!-- Preset Scenarios -->
           <div class="preset-row">
             <span class="preset-label">Testar exemplos:</span>
             <button type="button" class="preset-chip" data-query="fire">🦊 App: "fire" (Firefox)</button>
@@ -1872,219 +1972,164 @@
       </div>
     </section>
 
-    <!-- Problem vs Solution -->
-    <section id="problema" class="block">
+    <!-- Exclusive Section 1: Uma Tecla, Três Destinos (A Regra do Enter) -->
+    <section id="regra-do-enter" class="block">
       <div class="container">
         <div class="section-head">
-          <span class="section-kicker">[ O PROBLEMA vs. A SOLUÇÃO ]</span>
-          <h2>A busca do Windows ficou pesada. O Magic Explore devolve o foco.</h2>
-          <p>Substitua o menu lento e poluído do sistema por uma barra centralizada que obedece exatamente ao seu comando no teclado.</p>
+          <span class="section-kicker">Uma Tecla · Três Destinos</span>
+          <h2>Sem comandos complicados. O próprio Enter decide com você.</h2>
+          <p>Você não precisa decorar prefixos nem escolher abas antes de digitar. O Magic Explore reage automaticamente ao que você escreveu e à velocidade do seu Enter.</p>
         </div>
 
-        <div class="vs-grid">
-          <div class="vs-card">
-            <div class="vs-tag">Busca Padrão do Windows (Win + S)</div>
-            <ul class="vs-list">
-              <li>
-                <span class="vs-icon bad">✕</span>
-                <span>Painel lateral pesado que demora para carregar e exibe notícias, anúncios e sugestões indesejadas</span>
-              </li>
-              <li>
-                <span class="vs-icon bad">✕</span>
-                <span>Mistura arquivos locais, configurações e resultados web sem deixar claro o que o <strong>Enter</strong> vai abrir</span>
-              </li>
-              <li>
-                <span class="vs-icon bad">✕</span>
-                <span>Tenta forçar o Microsoft Edge e o Bing mesmo quando seu navegador padrão é o <strong>Firefox com Google</strong></span>
-              </li>
-              <li>
-                <span class="vs-icon bad">✕</span>
-                <span>O atalho nobre <strong>Win + Space</strong> fica desperdiçado trocando o layout do teclado por acidente</span>
-              </li>
-            </ul>
-          </div>
+        <div class="enter-anatomy">
+          <!-- Route 1 -->
+          <article class="route-card app-route">
+            <div>
+              <div class="route-top">
+                <span class="route-kbd">1× Enter ↵</span>
+                <span class="route-timing">0 ms · Instantâneo</span>
+              </div>
+              <h3>1. Quando é um Aplicativo</h3>
+              <p>Enquanto você digita, os programas do Menu Iniciar e da Microsoft Store aparecem ao vivo. Basta um toque no Enter para abrir o aplicativo selecionado.</p>
+            </div>
 
-          <div class="vs-card good">
-            <div class="vs-tag">Com o Magic Explore (Win + Space)</div>
-            <ul class="vs-list">
-              <li>
-                <span class="vs-icon ok">✓</span>
-                <span>Barra flutuante estilo <strong>Apple Spotlight (HIG)</strong> centralizada na tela em menos de 50 ms</span>
-              </li>
-              <li>
-                <span class="vs-icon ok">✓</span>
-                <span><strong>1× Enter inteligente:</strong> se houver programa correspondente, abre o app; se não houver, pesquisa no <strong>Windows Explorer</strong> em todo o PC</span>
-              </li>
-              <li>
-                <span class="vs-icon ok">✓</span>
-                <span><strong>2× Enter (duplo Enter):</strong> abre imediatamente o seu navegador padrão (ex.: Firefox) pesquisando direto no <strong>Google</strong></span>
-              </li>
-              <li>
-                <span class="vs-icon ok">✓</span>
-                <span>Opção de <strong>fundo da tela opaco</strong> para foco total e aviso automático discreto quando estiver em uma janela de Administrador</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- How it works in 4 steps -->
-    <section id="como-funciona" class="block">
-      <div class="container">
-        <div class="section-head">
-          <span class="section-kicker">[ FLUXO EM 4 PASSOS ]</span>
-          <h2>Um único atalho para programas, arquivos e web.</h2>
-          <p>Projetado em Rust + Tauri v2 para não pesar em PCs modestos e responder no milissegundo em que você toca no teclado.</p>
-        </div>
-
-        <div class="steps-grid">
-          <article class="step-card">
-            <span class="step-num">PASSO 01</span>
-            <h3>Instale e autorize</h3>
-            <p>O instalador adiciona automaticamente a exceção no Windows Defender, ativa o início com o PC e pede sua autorização para assumir o <kbd>Win</kbd> + <kbd>Space</kbd>.</p>
+            <div class="route-visual">
+              <div class="mini-typing">
+                <span>Digitado: <strong style="color:#fff">calc</strong></span>
+                <span>1 encontrado</span>
+              </div>
+              <div class="mini-result">
+                <span>🧮</span>
+                <span style="flex:1">Calculadora</span>
+                <span style="opacity:0.75; font-size:0.72rem">↵ Abrir</span>
+              </div>
+            </div>
           </article>
 
-          <article class="step-card">
-            <span class="step-num">PASSO 02</span>
-            <h3>Pressione Win + Space</h3>
-            <p>A barra surge centralizada no monitor ativo com desfoque Acrylic nativo (ou fundo opaco na tela toda, se ativado nas configurações).</p>
+          <!-- Route 2 -->
+          <article class="route-card exp-route">
+            <div>
+              <div class="route-top">
+                <span class="route-kbd">1× Enter ↵</span>
+                <span class="route-timing">Após 280 ms</span>
+              </div>
+              <h3>2. Quando é um Arquivo no PC</h3>
+              <p>Se o texto não corresponder a nenhum programa instalado, um único Enter abre o <strong>Windows Explorer</strong> já pesquisando o termo em todo o seu computador.</p>
+            </div>
+
+            <div class="route-visual">
+              <div class="mini-typing">
+                <span>Digitado: <strong style="color:#fff">contrato_final.pdf</strong></span>
+                <span>0 apps</span>
+              </div>
+              <div class="mini-result">
+                <span>📁</span>
+                <span style="flex:1">Explorador de Arquivos (Este Computador)</span>
+              </div>
+            </div>
           </article>
 
-          <article class="step-card">
-            <span class="step-num">PASSO 03</span>
-            <h3>1× Enter: App ou Explorer</h3>
-            <p>Os apps aparecem ao vivo enquanto você digita. Com app selecionado, <kbd>Enter</kbd> abre o programa. Sem app, <kbd>1× Enter</kbd> abre o Explorer pesquisando no PC todo.</p>
-          </article>
+          <!-- Route 3 -->
+          <article class="route-card web-route">
+            <div>
+              <div class="route-top">
+                <span class="route-kbd">2× Enter ↵↵</span>
+                <span class="route-timing">Duplo clique ≤ 280 ms</span>
+              </div>
+              <h3>3. Quando é Pesquisa na Web</h3>
+              <p>Deu dois toques rápidos no Enter? O Magic Explore cancela a abertura do Explorer e abre direto o seu <strong>navegador padrão (ex: Firefox)</strong> pesquisando no <strong>Google</strong>.</p>
+            </div>
 
-          <article class="step-card">
-            <span class="step-num">PASSO 04</span>
-            <h3>2× Enter: Busca no Google</h3>
-            <p>Quando o termo digitado não é um aplicativo, dois toques rápidos no <kbd>Enter</kbd> (≤ 280 ms) abrem seu navegador padrão pesquisando direto no Google.</p>
+            <div class="route-visual">
+              <div class="mini-typing">
+                <span>Digitado: <strong style="color:#fff">previsão do tempo</strong></span>
+                <span>↵ · ↵ rápido</span>
+              </div>
+              <div class="mini-result">
+                <span>🌐</span>
+                <span style="flex:1">Firefox → google.com/search?q=...</span>
+              </div>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Bento Features -->
-    <section id="recursos" class="block">
+    <!-- Exclusive Section 2: Detalhes Pensados para o Windows -->
+    <section id="engenharia" class="block">
       <div class="container">
         <div class="section-head">
-          <span class="section-kicker">[ ENGENHARIA &amp; RECURSOS ]</span>
-          <h2>Construído sob medida para Windows 10 e 11.</h2>
-          <p>Cada limitação do Windows foi tratada com hooks Win32 nativos para que a experiência seja fluida e sem efeitos colaterais.</p>
+          <span class="section-kicker">Detalhes Pensados para o Windows</span>
+          <h2>Leve, discreto e sob seu controle.</h2>
+          <p>Criado para ficar invisível na bandeja do sistema consumindo ~0% de CPU e aparecer exatamente no centro da sua tela.</p>
         </div>
 
-        <div class="bento-grid">
-          <article class="feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></svg>
+        <div class="showcase-stack">
+          <!-- Card A: Win + Space Hook -->
+          <article class="craft-card span-7">
+            <div>
+              <span class="craft-tag">⌨️ Interceptação Nativa Win32</span>
+              <h3>Assuma o Win + Space sem abrir o Menu Iniciar.</h3>
+              <p>No Windows, o atalho <kbd>Win</kbd> + <kbd>Space</kbd> é bloqueado pelo sistema para troca de idioma. O Magic Explore usa um hook nativo leve (<code>WH_KEYBOARD_LL</code>) com autorização já na instalação — e caso você escolha outro atalho nas configurações, ele avisa se houver conflito com o Windows.</p>
             </div>
-            <h3>Hook Nativo Win + Space</h3>
-            <p>Intercepta <code>WH_KEYBOARD_LL</code> em menos de 0,1 ms e injeta tecla virtual silenciosa (<code>0xE8</code>) para impedir que o Menu Iniciar abra ao soltar a tecla Windows.</p>
+
+            <div class="hook-diagram">
+              <div class="hook-row">
+                <span><strong>Win + Space</strong> · Troca de idioma do Windows</span>
+                <span class="hook-status">✓ Substituído com autorização</span>
+              </div>
+              <div class="hook-row">
+                <span><strong>Bloqueio do Menu Iniciar</strong> · Injeção virtual <code>0xE8</code> ao soltar Win</span>
+                <span class="hook-status">✓ Ativo (&lt; 0,1 ms)</span>
+              </div>
+              <div class="hook-row">
+                <span><strong>Troca de idioma alternativa</strong> · <kbd>Alt</kbd> + <kbd>Shift</kbd> ou barra de tarefas</span>
+                <span class="hook-status warn">Continua disponível</span>
+              </div>
+            </div>
           </article>
 
-          <article class="feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <!-- Card B: Interactive Opaque Backdrop Preview -->
+          <article class="craft-card span-5">
+            <div>
+              <span class="craft-tag">🌑 Opção de Foco Total</span>
+              <h3>Fundo transparente ou tela opaca: você escolhe.</h3>
+              <p>Prefere que o restante do monitor escureça totalmente quando a barra aparece no meio da tela? Basta ligar a opção <strong>"Deixar fundo da tela opaco"</strong> nas configurações.</p>
             </div>
-            <h3>Detector 1× vs 2× Enter (280 ms)</h3>
-            <p>Quando não há app correspondente, aguarda 280 ms no primeiro Enter: se não vier o segundo, abre o Windows Explorer (<code>search-ms:</code>); se vier, cancela o Explorer e abre o Google.</p>
+
+            <div class="backdrop-compare" id="card-backdrop-box">
+              <div class="mini-bar-preview">
+                <img src="./assets/logo.png" alt="" />
+                <span>Magic Explore...</span>
+              </div>
+              <button type="button" class="mini-switch-btn" id="card-backdrop-btn">
+                Alternar: Modo Transparente / Fundo Opaco
+              </button>
+            </div>
           </article>
 
-          <article class="feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/></svg>
+          <!-- Card C: Administrator Dynamic Capsule -->
+          <article class="craft-card span-12">
+            <div>
+              <span class="craft-tag">🛡️ Consciência de Privilégios do Windows</span>
+              <h3>Aviso automático quando uma janela de Administrador está em foco.</h3>
+              <p>Por isolamento de segurança do próprio Windows (<em>UIPI</em>), atalhos de programas comuns são pausados enquanto uma janela elevada (como o <strong>Gerenciador de Tarefas</strong> ou Terminal Admin) está ativa. Em vez de falhar em silêncio, o Magic Explore detecta a janela Admin com 0% de CPU e sobe uma cápsula discreta no topo da tela por 3 segundos — sem roubar o foco do que você está fazendo.</p>
             </div>
-            <h3>Centralização DPI &amp; Fundo Opaco</h3>
-            <p>Centraliza com precisão física em qualquer escala de DPI (100%, 125%, 150%) e inclui opção nas Configurações para cobrir o restante da tela com fundo escuro opaco.</p>
-          </article>
 
-          <article class="feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="admin-showcase-box">
+              <div class="static-island-pill">
+                <img src="./assets/logo.png" alt="" />
+                <span class="amber-dot"></span>
+                <strong>Tela de Administrador</strong>
+                <span style="opacity:0.35">·</span>
+                <span style="color:rgba(245,245,247,0.78)">Win + Space pausado nesta janela</span>
+              </div>
+              <div class="fake-taskmgr">
+                <span>🛡️ Gerenciador de Tarefas (Executando como Administrador)</span>
+                <span>Foco preservado</span>
+              </div>
             </div>
-            <h3>Aviso em Telas de Administrador</h3>
-            <p>Detecta via <code>EVENT_SYSTEM_FOREGROUND</code> + <code>TokenElevation</code> quando você foca uma janela Admin (ex: Gerenciador de Tarefas) e exibe uma cápsula discreta sem roubar foco.</p>
           </article>
-
-          <article class="feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </div>
-            <h3>Apps Clássicos + Microsoft Store</h3>
-            <p>Indexa atalhos do Menu Iniciar/Desktop e aplicativos modernos UWP (<code>Get-StartApps</code>) extraindo os ícones reais via <code>IShellItemImageFactory</code> com cache instantâneo.</p>
-          </article>
-
-          <article class="feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </div>
-            <h3>Bandeja &amp; Detector de Conflitos</h3>
-            <p>Fica no cantinho perto do relógio. Permite trocar a tecla de atalho a qualquer momento avisando caso a combinação escolhida substitua algum atalho do Windows.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Comparison Table -->
-    <section id="comparativo" class="block">
-      <div class="container">
-        <div class="section-head">
-          <span class="section-kicker">[ COMPARATIVO ]</span>
-          <h2>Pesquisa do Windows vs. Launchers Electron vs. Magic Explore</h2>
-          <p>Por que a arquitetura híbrida Rust (Tauri v2) + HTML/CSS puro entrega estética Apple sem sacrificar computadores mais leves.</p>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Recurso / Métrica</th>
-                <th>Pesquisa do Windows (Win + S)</th>
-                <th>Launchers Electron</th>
-                <th class="highlight-col">Magic Explore v1.0</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Tamanho do Instalador</strong></td>
-                <td class="status-no">Embutido no sistema</td>
-                <td class="status-no">~120 MB a 180 MB</td>
-                <td class="status-yes">✔ Apenas 3,19 MB (.exe NSIS)</td>
-              </tr>
-              <tr>
-                <td><strong>Uso de CPU quando fechado</strong></td>
-                <td class="status-no">Indexador constante em background</td>
-                <td class="status-no">Processos Chromium ativos</td>
-                <td class="status-yes">✔ ~0% CPU (100% orientado a eventos Win32)</td>
-              </tr>
-              <tr>
-                <td><strong>Atalho Win + Space nativo</strong></td>
-                <td class="status-no">❌ Troca layout do teclado</td>
-                <td class="status-no">❌ Falha no RegisterHotKey padrão</td>
-                <td class="status-yes">✔ Hook nativo com bloqueio do Menu Iniciar</td>
-              </tr>
-              <tr>
-                <td><strong>1× Enter (Explorer) vs 2× Enter (Web)</strong></td>
-                <td class="status-no">❌ Abre Bing no Microsoft Edge</td>
-                <td class="status-no">❌ Exige prefixos manuais (g:, f:)</td>
-                <td class="status-yes">✔ Automático: 1× Explorer · 2× Google no seu navegador</td>
-              </tr>
-              <tr>
-                <td><strong>Opção de Fundo da Tela Opaco</strong></td>
-                <td class="status-no">❌ Não possui</td>
-                <td class="status-no">❌ Não possui</td>
-                <td class="status-yes">✔ Ativável com 1 clique nas Configurações</td>
-              </tr>
-              <tr>
-                <td><strong>Aviso em Janelas de Administrador</strong></td>
-                <td class="status-no">N/A</td>
-                <td class="status-no">❌ Para de funcionar sem avisar</td>
-                <td class="status-yes">✔ Cápsula flutuante estilo Apple sem roubar foco</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
@@ -2093,9 +2138,9 @@
     <section id="download" class="block">
       <div class="container">
         <div class="section-head">
-          <span class="section-kicker">[ CENTRAL DE DOWNLOADS · v1.0.0 ]</span>
+          <span class="section-kicker">Download</span>
           <h2>Baixe o Magic Explore para Windows.</h2>
-          <p>Escolha entre o instalador automatizado (que já configura o Windows Defender e o início com o PC) ou o executável portátil.</p>
+          <p>Instalador leve com configuração automática de exceção no Windows Defender ou versão portátil em arquivo único.</p>
         </div>
 
         <div class="download-grid">
@@ -2103,11 +2148,11 @@
             <div>
               <div class="dl-top">
                 <span class="dl-tag rec">Recomendado</span>
-                <span class="dl-size">3,19 MB · Windows 10/11 (x64)</span>
+                <span class="dl-size">3,19 MB · Windows 10/11</span>
               </div>
               <div class="dl-card-title">
                 <img src="./assets/logo.png" alt="Magic Explore" />
-                <h3>Instalador Magic Explore v1.0</h3>
+                <h3>Instalador Magic Explore</h3>
               </div>
               <p class="dl-desc">Assistente completo que prepara tudo automaticamente para uso diário no seu computador.</p>
               <ul class="dl-list">
@@ -2119,13 +2164,13 @@
             </div>
 
             <div class="dl-actions">
-              <a class="btn-primary" href="./downloads/Magic_Explore_v1.0_Setup.exe" download="Magic_Explore_v1.0_Setup.exe">
+              <a class="btn-primary" href="./downloads/Magic_Explore_v1.0_Setup.exe" download="Magic_Explore_Setup.exe">
                 <img src="./assets/logo.png" alt="" />
-                Baixar Magic_Explore_v1.0_Setup.exe
+                Baixar Instalador (.exe)
               </a>
-              <div class="hash-box" title="SHA-256 de Magic_Explore_v1.0_Setup.exe">
-                <span class="hash-text">SHA-256: 00CCD0940E856881F29B61FE085A0448F85ECE11007D25DAB25BE3814732A2D1</span>
-                <button type="button" class="copy-hash" data-hash="00CCD0940E856881F29B61FE085A0448F85ECE11007D25DAB25BE3814732A2D1">Copiar</button>
+              <div class="hash-box" title="SHA-256 do Instalador">
+                <span class="hash-text">SHA-256: B85BDC0EAA65318D1669CE7FB63D881F511270BE914EC7448B1036E9A70A95F9</span>
+                <button type="button" class="copy-hash" data-hash="B85BDC0EAA65318D1669CE7FB63D881F511270BE914EC7448B1036E9A70A95F9">Copiar</button>
               </div>
             </div>
           </div>
@@ -2134,15 +2179,15 @@
             <div>
               <div class="dl-top">
                 <span class="dl-tag alt">Sem Instalação</span>
-                <span class="dl-size">10,54 MB · Windows 10/11 (x64)</span>
+                <span class="dl-size">10,54 MB · Windows 10/11</span>
               </div>
               <div class="dl-card-title">
                 <img src="./assets/logo.png" alt="Magic Explore" />
-                <h3>Magic Explore Portátil v1.0</h3>
+                <h3>Magic Explore Portátil</h3>
               </div>
               <p class="dl-desc">Executável único pronto para rodar direto de qualquer pasta sem passar pelo instalador.</p>
               <ul class="dl-list">
-                <li>Abre direto na bandeja do sistema com a mesma estética Apple HIG</li>
+                <li>Abre direto na bandeja do sistema pronto para usar</li>
                 <li>Exibe modal de autorização do <strong>Win + Space</strong> na 1ª execução</li>
                 <li>Salva configurações e cache em <code>%APPDATA%\Magic Explore</code></li>
                 <li>Inclui opção de fundo da tela opaco e aviso de Administrador</li>
@@ -2152,11 +2197,11 @@
             <div class="dl-actions">
               <a class="btn-secondary" href="./downloads/Magic_Explore_Portable.exe" download="Magic_Explore_Portable.exe">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Baixar Magic_Explore_Portable.exe
+                Baixar Versão Portátil (.exe)
               </a>
               <div class="hash-box" title="SHA-256 de Magic_Explore_Portable.exe">
-                <span class="hash-text">SHA-256: 7DE85DE871932470FCF2F4A37EE5714D8CB1DA85A9BE63E87C2F0E6D607DB26F</span>
-                <button type="button" class="copy-hash" data-hash="7DE85DE871932470FCF2F4A37EE5714D8CB1DA85A9BE63E87C2F0E6D607DB26F">Copiar</button>
+                <span class="hash-text">SHA-256: 0728941ACE21438AAF81C0CA92E97F0F7447866A269A71E16599A01CD4C69936</span>
+                <button type="button" class="copy-hash" data-hash="0728941ACE21438AAF81C0CA92E97F0F7447866A269A71E16599A01CD4C69936">Copiar</button>
               </div>
             </div>
           </div>
@@ -2164,7 +2209,7 @@
 
         <div class="smartscreen-note">
           <div>
-            <strong>🛡️ Sobre o Windows Defender e Antivírus:</strong> como o Magic Explore utiliza um hook nativo de teclado (<code>WH_KEYBOARD_LL</code>) para assumir o atalho <strong>Win + Space</strong> e não possui certificado comercial EV pago da Microsoft, alguns antivírus podem exibir alerta de falso-positivo. <strong>O próprio instalador já oferece configurar a exceção automaticamente no Windows Defender com 1 clique</strong> antes de extrair o programa, e lembra o caminho da pasta ao finalizar caso você utilize outro antivírus.
+            <strong>🛡️ Sobre o Windows Defender e Antivírus:</strong> como o Magic Explore utiliza um hook nativo de teclado (<code>WH_KEYBOARD_LL</code>) para assumir o atalho <strong>Win + Space</strong> e não possui certificado comercial pago da Microsoft, alguns antivírus podem exibir alerta de falso-positivo. <strong>O próprio instalador já configura a exceção automaticamente no Windows Defender com 1 clique</strong> antes de extrair o programa, e lembra o caminho da pasta ao finalizar caso você utilize outro antivírus.
           </div>
           <div>
             No Windows SmartScreen (<em>"O Windows protegeu o computador"</em>), basta clicar em <strong>Mais informações</strong> → <strong>Executar assim mesmo</strong>.
@@ -2177,34 +2222,24 @@
     <section id="faq" class="block">
       <div class="container">
         <div class="section-head">
-          <span class="section-kicker">[ PERGUNTAS FREQUENTES ]</span>
-          <h2>Tire suas dúvidas sobre o Magic Explore.</h2>
+          <span class="section-kicker">Perguntas Frequentes</span>
+          <h2>Dúvidas rápidas sobre o Magic Explore.</h2>
         </div>
 
         <div class="faq-list">
           <details>
-            <summary>Por que o instalador pede para adicionar o app nas exceções do Windows Defender?</summary>
+            <summary>Por que o instalador adiciona o app nas exceções do Windows Defender?</summary>
             <p>Para substituir o atalho nativo <strong>Win + Space</strong> do Windows sem abrir o menu de idioma nem o Menu Iniciar, o Magic Explore usa a API oficial de baixo nível do Windows (<code>WH_KEYBOARD_LL</code>). Antivírus costumam monitorar programas não assinados que usam essa API. O aplicativo não grava nenhuma tecla digitada — ele apenas verifica se a combinação do seu atalho foi pressionada. Ao aceitar a configuração automática no instalador, o Windows Defender já adiciona a pasta às exceções.</p>
           </details>
 
           <details>
-            <summary>Como eu troco o idioma/layout do teclado se o Magic Explore assumir o Win + Space?</summary>
+            <summary>Como eu troco o idioma do teclado se o Magic Explore assumir o Win + Space?</summary>
             <p>Você continua podendo alternar o idioma normalmente pelo atalho alternativo nativo do Windows (<strong>Alt + Shift</strong>) ou clicando na sigla do idioma (ex.: <code>POR</code> / <code>ENG</code>) no canto direito da barra de tarefas. Além disso, nas Configurações do Magic Explore você pode escolher qualquer outro atalho como <strong>Alt + Space</strong> ou <strong>Ctrl + Space</strong>.</p>
           </details>
 
           <details>
             <summary>Como funciona a opção de deixar o fundo da tela opaco?</summary>
             <p>Abra as <strong>Configurações</strong> do Magic Explore (clicando no ícone da engrenagem na barra ou pelo ícone na bandeja do sistema) e ative a chave <strong>"Deixar fundo da tela opaco ao abrir"</strong>. Sempre que a barra aparecer no meio da tela, o restante do monitor ficará coberto por um fundo escuro opaco para foco total. Clicar em qualquer ponto fora da barra fecha o Magic Explore na hora.</p>
-          </details>
-
-          <details>
-            <summary>Por que sobe um aviso quando estou no Gerenciador de Tarefas ou em uma tela de Administrador?</summary>
-            <p>Por segurança do próprio Windows (<em>UIPI — User Interface Privilege Isolation</em>), programas que rodam sem privilégio de Administrador não podem interceptar atalhos de teclado enquanto uma janela em modo Administrador está em foco. Para que você nunca fique sem entender o motivo, o Magic Explore detecta automaticamente essa situação e mostra uma cápsula discreta no topo da tela por 3 segundos (sem roubar o foco da sua janela).</p>
-          </details>
-
-          <details>
-            <summary>Como o app sabe a diferença entre 1× Enter e 2× Enter?</summary>
-            <p>Quando o que você digitou corresponde a um aplicativo instalado, <strong>1× Enter</strong> abre o programa imediatamente. Quando não corresponde a nenhum aplicativo, o primeiro <strong>Enter</strong> aguarda uma janela rápida de <strong>280 ms</strong> (o tempo de um duplo clique): se você der só 1 Enter, ele abre o <strong>Windows Explorer</strong> pesquisando o termo no PC todo; se der o 2º Enter dentro desses 280 ms, ele cancela o Explorer e abre o seu navegador padrão pesquisando no <strong>Google</strong>.</p>
           </details>
 
           <details>
@@ -2220,15 +2255,14 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <img src="./assets/logo.png" alt="Magic Explore" />
-        <span>Magic Explore v1.0.0 · Windows 10 &amp; 11</span>
+        <span>Magic Explore</span>
       </div>
       <div class="footer-links">
         <a href="#simulador">Simulador</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#recursos">Recursos</a>
-        <a href="#download">Central de Downloads</a>
-        <a href="https://github.com/conrider3000/MagicExplore" target="_blank" rel="noopener">Código no GitHub</a>
-        <a href="https://github.com/conrider3000/MagicExplore/issues" target="_blank" rel="noopener">Reportar bug</a>
+        <a href="#regra-do-enter">Como funciona</a>
+        <a href="#engenharia">Recursos</a>
+        <a href="#download">Download</a>
+        <a href="https://github.com/conrider3000/MagicExplore" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
   </footer>
@@ -2260,7 +2294,6 @@
       const tabSearch = document.getElementById("sim-tab-search");
       const tabSettings = document.getElementById("sim-tab-settings");
       const btnOpaque = document.getElementById("sim-btn-opaque");
-      const navOpaqueBtn = document.getElementById("nav-opaque-btn");
       const simToggleOpaque = document.getElementById("sim-toggle-opaque");
       const btnAdmin = document.getElementById("sim-btn-admin");
       const adminPill = document.getElementById("sim-admin-pill");
@@ -2276,6 +2309,9 @@
       const kEnter2 = document.getElementById("k-enter2");
       const simToast = document.getElementById("sim-toast");
       const simToastText = document.getElementById("sim-toast-text");
+
+      const cardBackdropBox = document.getElementById("card-backdrop-box");
+      const cardBackdropBtn = document.getElementById("card-backdrop-btn");
 
       let opaqueOn = false;
       let adminTimer = null;
@@ -2370,7 +2406,7 @@
         viewSettings.style.display = "block";
         tabSettings.classList.add("active");
         tabSearch.classList.remove("active");
-        flashToast("Menu Configurações aberto (mesma estética Apple HIG)");
+        flashToast("Menu Configurações aberto");
       }
 
       function setOpaqueMode(next) {
@@ -2379,6 +2415,7 @@
         btnOpaque.classList.toggle("active", opaqueOn);
         btnOpaque.textContent = opaqueOn ? "🌑 Fundo Opaco: ON" : "🌑 Fundo Opaco: OFF";
         simToggleOpaque.classList.toggle("on", opaqueOn);
+        cardBackdropBox.classList.toggle("is-opaque", opaqueOn);
         flashToast(
           opaqueOn
             ? "Fundo da tela opaco ATIVADO · Foco total na barra centralizada"
@@ -2467,9 +2504,8 @@
 
       btnOpaque.addEventListener("click", () => setOpaqueMode(!opaqueOn));
       simToggleOpaque.addEventListener("click", () => setOpaqueMode(!opaqueOn));
-      navOpaqueBtn.addEventListener("click", () => {
-        document.getElementById("simulador").scrollIntoView({ behavior: "smooth" });
-        setOpaqueMode(!opaqueOn);
+      cardBackdropBtn.addEventListener("click", () => {
+        cardBackdropBox.classList.toggle("is-opaque");
       });
 
       document.querySelectorAll("[data-sim-toggle]").forEach((btn) => {

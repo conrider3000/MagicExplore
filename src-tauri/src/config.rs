@@ -127,7 +127,7 @@ pub fn set_autostart_enabled(enabled: bool) -> Result<(), String> {
 
     if enabled {
         let exe = std::env::current_exe().map_err(|e| e.to_string())?;
-        let quoted = format!("\"{}\"", exe.display());
+        let quoted = format!("\"{}\" --autostart", exe.display());
         key.set_value(RUN_VALUE_NAME, &quoted)
             .map_err(|e| format!("Falha ao gravar autostart: {e}"))?;
     } else {
