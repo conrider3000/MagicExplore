@@ -97,7 +97,7 @@
       z-index: 60;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      background: rgba(7, 8, 13, 0.8);
+      background: rgba(7, 8, 13, 0.82);
       border-bottom: 1px solid var(--border);
     }
 
@@ -114,35 +114,24 @@
       align-items: center;
       gap: 10px;
       font-weight: 800;
-      font-size: 1.06rem;
+      font-size: 1.08rem;
       letter-spacing: -0.02em;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .brand img {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       object-fit: contain;
       filter: drop-shadow(0 4px 10px rgba(10, 132, 255, 0.35));
-    }
-
-    .brand-tag {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
     }
 
     .nav-center {
       display: flex;
       align-items: center;
-      gap: 28px;
-      font-size: 0.9rem;
+      gap: 30px;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--text-secondary);
     }
@@ -167,9 +156,9 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 8px 13px;
+      padding: 8px 14px;
       border-radius: var(--radius-sm);
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-secondary);
       border: 1px solid var(--border);
@@ -188,9 +177,9 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: var(--radius-sm);
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       font-weight: 700;
       color: #ffffff;
       background: linear-gradient(180deg, #1f93ff 0%, #0071e3 100%);
@@ -206,7 +195,7 @@
 
     /* Hero Section */
     .hero {
-      padding: 46px 0 36px;
+      padding: 58px 0 24px;
       text-align: center;
     }
 
@@ -214,7 +203,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0 auto 18px;
+      margin: 0 auto 20px;
       position: relative;
       width: fit-content;
     }
@@ -233,8 +222,8 @@
     .hero-logo {
       position: relative;
       z-index: 1;
-      width: 156px;
-      height: 156px;
+      width: 158px;
+      height: 158px;
       display: block;
       object-fit: contain;
       filter: drop-shadow(0 18px 36px rgba(10, 132, 255, 0.4));
@@ -246,30 +235,8 @@
       50% { transform: translateY(-6px); }
     }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 6px 15px;
-      border-radius: 999px;
-      background: var(--blue-soft);
-      border: 1px solid var(--blue-border);
-      color: #8cc8ff;
-      font-size: 0.81rem;
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-
-    .hero-badge .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 10px var(--gold);
-    }
-
     h1 {
-      font-size: clamp(2.2rem, 4.8vw, 3.55rem);
+      font-size: clamp(2.25rem, 4.9vw, 3.6rem);
       font-weight: 800;
       line-height: 1.08;
       letter-spacing: -0.035em;
@@ -286,9 +253,9 @@
 
     .hero-subtitle {
       max-width: 650px;
-      margin: 0 auto 28px;
+      margin: 0 auto 30px;
       color: var(--text-secondary);
-      font-size: 1.08rem;
+      font-size: 1.09rem;
     }
 
     kbd {
@@ -320,7 +287,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .btn-primary {
@@ -381,7 +348,6 @@
       gap: 10px 22px;
       font-size: 0.84rem;
       color: var(--text-muted);
-      margin-bottom: 40px;
     }
 
     .trust-strip span {
@@ -394,7 +360,165 @@
       color: var(--blue-bright);
     }
 
-    /* Interactive Live Spotlight Sandbox */
+    /* Section Headings */
+    section.block {
+      padding: 76px 0 12px;
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 42px;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.8rem, 3.3vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.028em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .section-head p {
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+    }
+
+    /* Section 1: Como Funciona ("A Regra do Enter" — 3 Routing Cards) */
+    .enter-anatomy {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .route-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .route-card:hover {
+      border-color: var(--blue-border);
+      transform: translateY(-3px);
+    }
+
+    .route-card.web-route:hover {
+      border-color: var(--gold-border);
+    }
+
+    .route-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .route-kbd {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: var(--blue-soft);
+      border: 1px solid var(--blue-border);
+      color: #a8d5ff;
+    }
+
+    .route-card.web-route .route-kbd {
+      background: var(--gold-soft);
+      border-color: var(--gold-border);
+      color: var(--gold);
+    }
+
+    .route-timing {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.73rem;
+      color: var(--text-muted);
+    }
+
+    .route-card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.015em;
+    }
+
+    .route-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    .route-visual {
+      padding: 14px;
+      border-radius: 13px;
+      background: rgba(7, 8, 13, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mini-typing {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mini-result {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(10, 132, 255, 0.22);
+      border: 1px solid rgba(10, 132, 255, 0.35);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.79rem;
+    }
+
+    .route-card.exp-route .mini-result {
+      background: rgba(255, 191, 46, 0.15);
+      border-color: rgba(255, 191, 46, 0.32);
+      color: #ffe08a;
+    }
+
+    .route-card.web-route .mini-result {
+      background: rgba(124, 77, 255, 0.2);
+      border-color: rgba(124, 77, 255, 0.4);
+      color: #decfff;
+    }
+
+    /* Section 2: Interactive Live Simulator (After Como Funciona) */
     .playground {
       width: 100%;
       margin: 0 auto;
@@ -1049,165 +1173,7 @@
       object-fit: contain;
     }
 
-    /* Section Headings */
-    section.block {
-      padding: 84px 0 12px;
-    }
-
-    .section-head {
-      text-align: center;
-      max-width: 680px;
-      margin: 0 auto 44px;
-    }
-
-    .section-kicker {
-      display: inline-block;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      margin-bottom: 10px;
-    }
-
-    .section-head h2 {
-      font-size: clamp(1.8rem, 3.3vw, 2.5rem);
-      font-weight: 800;
-      letter-spacing: -0.028em;
-      line-height: 1.15;
-      margin-bottom: 12px;
-    }
-
-    .section-head p {
-      color: var(--text-secondary);
-      font-size: 1.02rem;
-    }
-
-    /* Exclusive Section 1: "A Regra do Enter" (3 Interactive Routing Cards) */
-    .enter-anatomy {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .route-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 26px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 20px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .route-card:hover {
-      border-color: var(--blue-border);
-      transform: translateY(-3px);
-    }
-
-    .route-card.web-route:hover {
-      border-color: var(--gold-border);
-    }
-
-    .route-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .route-kbd {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 9px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      font-weight: 800;
-      background: var(--blue-soft);
-      border: 1px solid var(--blue-border);
-      color: #a8d5ff;
-    }
-
-    .route-card.web-route .route-kbd {
-      background: var(--gold-soft);
-      border-color: var(--gold-border);
-      color: var(--gold);
-    }
-
-    .route-timing {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.73rem;
-      color: var(--text-muted);
-    }
-
-    .route-card h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      letter-spacing: -0.015em;
-    }
-
-    .route-card p {
-      font-size: 0.92rem;
-      color: var(--text-secondary);
-    }
-
-    .route-visual {
-      padding: 14px;
-      border-radius: 13px;
-      background: rgba(7, 8, 13, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      font-size: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .mini-typing {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.76rem;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .mini-result {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 7px 10px;
-      border-radius: 8px;
-      background: rgba(10, 132, 255, 0.22);
-      border: 1px solid rgba(10, 132, 255, 0.35);
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 0.79rem;
-    }
-
-    .route-card.exp-route .mini-result {
-      background: rgba(255, 191, 46, 0.15);
-      border-color: rgba(255, 191, 46, 0.32);
-      color: #ffe08a;
-    }
-
-    .route-card.web-route .mini-result {
-      background: rgba(124, 77, 255, 0.2);
-      border-color: rgba(124, 77, 255, 0.4);
-      color: #decfff;
-    }
-
-    /* Exclusive Section 2: Visual Engineering Showcases (3 Rich Interactive Cards) */
+    /* Section 3: Recursos (3 Rich Interactive Cards) */
     .showcase-stack {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -1266,7 +1232,6 @@
       color: var(--text-secondary);
     }
 
-    /* Visual widget inside Craft Card A: Win + Space Hook & Conflict Guard */
     .hook-diagram {
       padding: 18px;
       border-radius: 14px;
@@ -1306,7 +1271,6 @@
       color: #ffc66d;
     }
 
-    /* Visual widget inside Craft Card B: Opaque vs Glass Interactive Preview */
     .backdrop-compare {
       padding: 18px;
       border-radius: 14px;
@@ -1367,7 +1331,6 @@
       font-weight: 600;
     }
 
-    /* Visual widget inside Craft Card C: Admin Island Showcase */
     .admin-showcase-box {
       padding: 22px;
       border-radius: 15px;
@@ -1418,7 +1381,7 @@
       color: var(--text-muted);
     }
 
-    /* Download Hub */
+    /* Section 4: Download Hub */
     .download-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1595,7 +1558,7 @@
       color: var(--text);
     }
 
-    /* FAQ */
+    /* Section 5: FAQ */
     .faq-list {
       max-width: 800px;
       margin: 0 auto;
@@ -1744,9 +1707,9 @@
       </a>
 
       <nav class="nav-center" aria-label="Navegação principal">
+        <a href="#como-funciona">Como funciona</a>
         <a href="#simulador">Simulador</a>
-        <a href="#regra-do-enter">Como funciona</a>
-        <a href="#engenharia">Recursos</a>
+        <a href="#recursos">Recursos</a>
         <a href="#download">Download</a>
         <a href="#faq">Dúvidas</a>
       </nav>
@@ -1792,7 +1755,7 @@
         <div class="trust-strip">
           <span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Instalador de 3,19 MB
+            Instalador leve (3,23 MB)
           </span>
           <span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1807,13 +1770,106 @@
             Exceção automática no Windows Defender
           </span>
         </div>
+      </div>
+    </section>
 
-        <!-- Interactive Live Simulator -->
-        <div id="simulador" class="playground" aria-label="Simulador interativo do Magic Explore">
+    <!-- Section 1: Como Funciona (Uma Tecla, Três Destinos) -->
+    <section id="como-funciona" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Como Funciona</span>
+          <h2>Uma única tecla, três destinos automáticos.</h2>
+          <p>Você não precisa decorar prefixos nem escolher abas antes de digitar. O Magic Explore reage automaticamente ao que você escreveu e à velocidade do seu Enter.</p>
+        </div>
+
+        <div class="enter-anatomy">
+          <!-- Route 1 -->
+          <article class="route-card app-route">
+            <div>
+              <div class="route-top">
+                <span class="route-kbd">1× Enter ↵</span>
+                <span class="route-timing">0 ms · Instantâneo</span>
+              </div>
+              <h3>1. Quando é um Aplicativo</h3>
+              <p>Enquanto você digita, os programas do Menu Iniciar e da Microsoft Store aparecem ao vivo abaixo da barra. Basta um toque no Enter para abrir o aplicativo selecionado.</p>
+            </div>
+
+            <div class="route-visual">
+              <div class="mini-typing">
+                <span>Digitado: <strong style="color:#fff">calc</strong></span>
+                <span>1 encontrado</span>
+              </div>
+              <div class="mini-result">
+                <span>🧮</span>
+                <span style="flex:1">Calculadora</span>
+                <span style="opacity:0.75; font-size:0.72rem">↵ Abrir</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Route 2 -->
+          <article class="route-card exp-route">
+            <div>
+              <div class="route-top">
+                <span class="route-kbd">1× Enter ↵</span>
+                <span class="route-timing">Após 280 ms</span>
+              </div>
+              <h3>2. Quando é um Arquivo no PC</h3>
+              <p>Se o texto não corresponder a nenhum programa instalado, um único Enter abre o <strong>Windows Explorer</strong> já pesquisando o termo em todo o seu computador.</p>
+            </div>
+
+            <div class="route-visual">
+              <div class="mini-typing">
+                <span>Digitado: <strong style="color:#fff">contrato_final.pdf</strong></span>
+                <span>0 apps</span>
+              </div>
+              <div class="mini-result">
+                <span>📁</span>
+                <span style="flex:1">Explorador de Arquivos (Este Computador)</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Route 3 -->
+          <article class="route-card web-route">
+            <div>
+              <div class="route-top">
+                <span class="route-kbd">2× Enter ↵↵</span>
+                <span class="route-timing">Duplo clique ≤ 280 ms</span>
+              </div>
+              <h3>3. Quando é Pesquisa na Web</h3>
+              <p>Deu dois toques rápidos no Enter? O Magic Explore cancela a abertura do Explorer e abre direto o seu <strong>navegador padrão (ex: Firefox)</strong> pesquisando no <strong>Google</strong>.</p>
+            </div>
+
+            <div class="route-visual">
+              <div class="mini-typing">
+                <span>Digitado: <strong style="color:#fff">previsão do tempo</strong></span>
+                <span>↵ · ↵ rápido</span>
+              </div>
+              <div class="mini-result">
+                <span>🌐</span>
+                <span style="flex:1">Firefox → google.com/search?q=...</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Simulador Interativo (Logo após o Como Funciona) -->
+    <section id="simulador" class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Simulador Interativo</span>
+          <h2>Teste a barra ao vivo antes de baixar.</h2>
+          <p>Digite qualquer termo abaixo, experimente o 1× Enter e o 2× Enter, alterne o fundo opaco ou abra o menu de configurações.</p>
+        </div>
+
+        <div class="playground" aria-label="Simulador interativo do Magic Explore">
           <div class="playground-bar">
             <div class="playground-title">
-              <span class="live-pill">Demo Interativa</span>
-              Digite na barra ou teste os modos abaixo
+              <span class="live-pill">Demo Ao Vivo</span>
+              A barra fica fixa no centro e a lista cresce apenas para baixo
             </div>
             <div class="playground-controls">
               <button type="button" class="seg-btn active" id="sim-tab-search">🔍 Barra de Busca</button>
@@ -1940,7 +1996,7 @@
                   <img src="./assets/logo.png" alt="" />
                   <span>Magic Explore na Bandeja</span>
                 </button>
-                <span>19:30</span>
+                <span>19:45</span>
               </div>
             </div>
           </div>
@@ -1972,94 +2028,11 @@
       </div>
     </section>
 
-    <!-- Exclusive Section 1: Uma Tecla, Três Destinos (A Regra do Enter) -->
-    <section id="regra-do-enter" class="block">
+    <!-- Section 3: Recursos -->
+    <section id="recursos" class="block">
       <div class="container">
         <div class="section-head">
-          <span class="section-kicker">Uma Tecla · Três Destinos</span>
-          <h2>Sem comandos complicados. O próprio Enter decide com você.</h2>
-          <p>Você não precisa decorar prefixos nem escolher abas antes de digitar. O Magic Explore reage automaticamente ao que você escreveu e à velocidade do seu Enter.</p>
-        </div>
-
-        <div class="enter-anatomy">
-          <!-- Route 1 -->
-          <article class="route-card app-route">
-            <div>
-              <div class="route-top">
-                <span class="route-kbd">1× Enter ↵</span>
-                <span class="route-timing">0 ms · Instantâneo</span>
-              </div>
-              <h3>1. Quando é um Aplicativo</h3>
-              <p>Enquanto você digita, os programas do Menu Iniciar e da Microsoft Store aparecem ao vivo. Basta um toque no Enter para abrir o aplicativo selecionado.</p>
-            </div>
-
-            <div class="route-visual">
-              <div class="mini-typing">
-                <span>Digitado: <strong style="color:#fff">calc</strong></span>
-                <span>1 encontrado</span>
-              </div>
-              <div class="mini-result">
-                <span>🧮</span>
-                <span style="flex:1">Calculadora</span>
-                <span style="opacity:0.75; font-size:0.72rem">↵ Abrir</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Route 2 -->
-          <article class="route-card exp-route">
-            <div>
-              <div class="route-top">
-                <span class="route-kbd">1× Enter ↵</span>
-                <span class="route-timing">Após 280 ms</span>
-              </div>
-              <h3>2. Quando é um Arquivo no PC</h3>
-              <p>Se o texto não corresponder a nenhum programa instalado, um único Enter abre o <strong>Windows Explorer</strong> já pesquisando o termo em todo o seu computador.</p>
-            </div>
-
-            <div class="route-visual">
-              <div class="mini-typing">
-                <span>Digitado: <strong style="color:#fff">contrato_final.pdf</strong></span>
-                <span>0 apps</span>
-              </div>
-              <div class="mini-result">
-                <span>📁</span>
-                <span style="flex:1">Explorador de Arquivos (Este Computador)</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Route 3 -->
-          <article class="route-card web-route">
-            <div>
-              <div class="route-top">
-                <span class="route-kbd">2× Enter ↵↵</span>
-                <span class="route-timing">Duplo clique ≤ 280 ms</span>
-              </div>
-              <h3>3. Quando é Pesquisa na Web</h3>
-              <p>Deu dois toques rápidos no Enter? O Magic Explore cancela a abertura do Explorer e abre direto o seu <strong>navegador padrão (ex: Firefox)</strong> pesquisando no <strong>Google</strong>.</p>
-            </div>
-
-            <div class="route-visual">
-              <div class="mini-typing">
-                <span>Digitado: <strong style="color:#fff">previsão do tempo</strong></span>
-                <span>↵ · ↵ rápido</span>
-              </div>
-              <div class="mini-result">
-                <span>🌐</span>
-                <span style="flex:1">Firefox → google.com/search?q=...</span>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Exclusive Section 2: Detalhes Pensados para o Windows -->
-    <section id="engenharia" class="block">
-      <div class="container">
-        <div class="section-head">
-          <span class="section-kicker">Detalhes Pensados para o Windows</span>
+          <span class="section-kicker">Recursos</span>
           <h2>Leve, discreto e sob seu controle.</h2>
           <p>Criado para ficar invisível na bandeja do sistema consumindo ~0% de CPU e aparecer exatamente no centro da sua tela.</p>
         </div>
@@ -2068,7 +2041,7 @@
           <!-- Card A: Win + Space Hook -->
           <article class="craft-card span-7">
             <div>
-              <span class="craft-tag">⌨️ Interceptação Nativa Win32</span>
+              <span class="craft-tag">⌨️ Atalho Global Nativo</span>
               <h3>Assuma o Win + Space sem abrir o Menu Iniciar.</h3>
               <p>No Windows, o atalho <kbd>Win</kbd> + <kbd>Space</kbd> é bloqueado pelo sistema para troca de idioma. O Magic Explore usa um hook nativo leve (<code>WH_KEYBOARD_LL</code>) com autorização já na instalação — e caso você escolha outro atalho nas configurações, ele avisa se houver conflito com o Windows.</p>
             </div>
@@ -2083,8 +2056,8 @@
                 <span class="hook-status">✓ Ativo (&lt; 0,1 ms)</span>
               </div>
               <div class="hook-row">
-                <span><strong>Troca de idioma alternativa</strong> · <kbd>Alt</kbd> + <kbd>Shift</kbd> ou barra de tarefas</span>
-                <span class="hook-status warn">Continua disponível</span>
+                <span><strong>Fechamento Rápido</strong> · Tecla <kbd>Esc</kbd> ou clique fora da barra</span>
+                <span class="hook-status warn">Instantâneo</span>
               </div>
             </div>
           </article>
@@ -2134,7 +2107,7 @@
       </div>
     </section>
 
-    <!-- Download Center -->
+    <!-- Section 4: Download Center -->
     <section id="download" class="block">
       <div class="container">
         <div class="section-head">
@@ -2148,7 +2121,7 @@
             <div>
               <div class="dl-top">
                 <span class="dl-tag rec">Recomendado</span>
-                <span class="dl-size">3,19 MB · Windows 10/11</span>
+                <span class="dl-size">3,23 MB · Windows 10/11</span>
               </div>
               <div class="dl-card-title">
                 <img src="./assets/logo.png" alt="Magic Explore" />
@@ -2218,7 +2191,7 @@
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- Section 5: FAQ -->
     <section id="faq" class="block">
       <div class="container">
         <div class="section-head">
@@ -2239,7 +2212,7 @@
 
           <details>
             <summary>Como funciona a opção de deixar o fundo da tela opaco?</summary>
-            <p>Abra as <strong>Configurações</strong> do Magic Explore (clicando no ícone da engrenagem na barra ou pelo ícone na bandeja do sistema) e ative a chave <strong>"Deixar fundo da tela opaco ao abrir"</strong>. Sempre que a barra aparecer no meio da tela, o restante do monitor ficará coberto por um fundo escuro opaco para foco total. Clicar em qualquer ponto fora da barra fecha o Magic Explore na hora.</p>
+            <p>Abra as <strong>Configurações</strong> do Magic Explore (clicando no ícone da engrenagem na barra ou pelo ícone na bandeja do sistema) e ative a chave <strong>"Deixar fundo da tela opaco ao abrir"</strong>. Sempre que a barra aparecer no meio da tela, o restante do monitor ficará coberto por um fundo escuro opaco para foco total. Clicar em qualquer ponto fora da barra ou apertar <strong>Esc</strong> fecha o Magic Explore na hora.</p>
           </details>
 
           <details>
@@ -2258,9 +2231,9 @@
         <span>Magic Explore</span>
       </div>
       <div class="footer-links">
+        <a href="#como-funciona">Como funciona</a>
         <a href="#simulador">Simulador</a>
-        <a href="#regra-do-enter">Como funciona</a>
-        <a href="#engenharia">Recursos</a>
+        <a href="#recursos">Recursos</a>
         <a href="#download">Download</a>
         <a href="https://github.com/conrider3000/MagicExplore" target="_blank" rel="noopener">GitHub</a>
       </div>
