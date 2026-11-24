@@ -112,6 +112,7 @@ fn show_main_bar(app: &AppHandle, open_settings: bool) {
     }
 
     let _ = win.show();
+    win32_hooks::set_bar_visible(true);
 
     if let Some(hwnd) = get_hwnd(&win) {
         win32_hooks::center_hwnd_on_active_monitor(hwnd, bar_phys_h);
@@ -133,9 +134,13 @@ fn show_main_bar(app: &AppHandle, open_settings: bool) {
 }
 
 fn hide_main_bar(app: &AppHandle) {
+    win32_hooks::set_bar_visible(false);
     win32_hooks::set_capture_mode(false);
     sync_backdrop_window(app, false);
     if let Some(win) = app.get_webview_window("main") {
+        if let Some(hwnd) = get_hwnd(&win) {
+            win32_hooks::hide_hwnd(hwnd);
+        }
         let _ = win.hide();
     }
 }
@@ -508,6 +513,9 @@ fn main() {
                         match evt {
                             win32_hooks::HookEvent::ToggleBar => {
                                 toggle_main_bar(&hook_app);
+                            }
+                            win32_hooks::HookEvent::HideBar => {
+                                hide_main_bar(&hook_app);
                             }
                             win32_hooks::HookEvent::CaptureCancelled => {
                                 let _ = hook_app.emit("hotkey-capture-cancelled", ());

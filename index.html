@@ -2169,8 +2169,8 @@
                 Baixar Instalador (.exe)
               </a>
               <div class="hash-box" title="SHA-256 do Instalador">
-                <span class="hash-text">SHA-256: B85BDC0EAA65318D1669CE7FB63D881F511270BE914EC7448B1036E9A70A95F9</span>
-                <button type="button" class="copy-hash" data-hash="B85BDC0EAA65318D1669CE7FB63D881F511270BE914EC7448B1036E9A70A95F9">Copiar</button>
+                <span class="hash-text">SHA-256: C29C83C616CEE2647F5C94C8552619846EE05C99853F96B603889D483A8A4012</span>
+                <button type="button" class="copy-hash" data-hash="C29C83C616CEE2647F5C94C8552619846EE05C99853F96B603889D483A8A4012">Copiar</button>
               </div>
             </div>
           </div>
@@ -2200,8 +2200,8 @@
                 Baixar Versão Portátil (.exe)
               </a>
               <div class="hash-box" title="SHA-256 de Magic_Explore_Portable.exe">
-                <span class="hash-text">SHA-256: 0728941ACE21438AAF81C0CA92E97F0F7447866A269A71E16599A01CD4C69936</span>
-                <button type="button" class="copy-hash" data-hash="0728941ACE21438AAF81C0CA92E97F0F7447866A269A71E16599A01CD4C69936">Copiar</button>
+                <span class="hash-text">SHA-256: 8B394DABD80E9A455087AE3AC9E6CEBF9FDBDEBBBD0247679D4ED098C5C62E82</span>
+                <button type="button" class="copy-hash" data-hash="8B394DABD80E9A455087AE3AC9E6CEBF9FDBDEBBBD0247679D4ED098C5C62E82">Copiar</button>
               </div>
             </div>
           </div>
@@ -2459,6 +2459,12 @@
 
       simInput.addEventListener("input", renderSimSearch);
       simInput.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          simSpotlight.classList.add("closed");
+          flashToast("Esc pressionado · Magic Explore fechado instantaneamente");
+          return;
+        }
         if (e.key === "ArrowDown" && currentMatches.length > 0) {
           e.preventDefault();
           selectedIdx = (selectedIdx + 1) % currentMatches.length;

@@ -464,27 +464,22 @@ conflictConfirmBtn.addEventListener("click", async () => {
   if (action && action.onConfirm) await action.onConfirm();
 });
 
-document.addEventListener("keydown", (e) => {
+window.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     e.preventDefault();
-    if (!conflictModal.classList.contains("hidden")) {
-      conflictCancelBtn.click();
-      return;
-    }
     if (isRecordingHotkey) {
       stopHotkeyCaptureUI();
       invoke("stop_hotkey_capture").catch(() => {});
       refreshState();
       return;
     }
-    if (currentView === "settings") {
-      switchView("search");
-      return;
+    if (!conflictModal.classList.contains("hidden")) {
+      hideConflictModal();
     }
     clearEnterTimer();
     invoke("hide_main_window").catch(() => {});
   }
-});
+}, true);
 
 listen("bar-opened", () => {
   clearEnterTimer();

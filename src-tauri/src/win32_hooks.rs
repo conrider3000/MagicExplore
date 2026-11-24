@@ -34,6 +34,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 #[derive(Debug, Clone)]
 pub enum HookEvent {
     ToggleBar,
+    HideBar,
     Captured(HotkeySpec),
     CaptureCancelled,
     AdminWindowFocused(isize),
@@ -42,6 +43,7 @@ pub enum HookEvent {
 static HOOK_EVENT_TX: OnceLock<mpsc::Sender<HookEvent>> = OnceLock::new();
 static HOTKEY_PACKED: AtomicU64 = AtomicU64::new(0);
 static CAPTURING_HOTKEY: AtomicBool = AtomicBool::new(false);
+static BAR_VISIBLE: AtomicBool = AtomicBool::new(false);
 static SHOW_ADMIN_TOAST: AtomicBool = AtomicBool::new(true);
 static TRIGGER_HELD: AtomicBool = AtomicBool::new(false);
 static SWALLOWED_VK: AtomicU32 = AtomicU32::new(0);
@@ -84,6 +86,10 @@ pub fn update_hook_hotkey(hk: &HotkeySpec, enabled: bool) {
 
 pub fn set_capture_mode(active: bool) {
     CAPTURING_HOTKEY.store(active, Ordering::Relaxed);
+}
+
+pub fn set_bar_visible(visible: bool) {
+    BAR_VISIBLE.store(visible, Ordering::Relaxed);
 }
 
 pub fn set_admin_toast_enabled(enabled: bool) {
@@ -233,6 +239,21 @@ unsafe extern "system" fn keyboard_hook_proc(
             return LRESULT(1);
         }
         return CallNextHookEx(None, code, wparam, lparam);
+    }
+
+    // Native Escape key interception whenever Magic Explore bar is open
+    if vk == VK_ESCAPE.0 as u32 && !win && !ctrl && !alt && !shift {
+        if is_down && BAR_VISIBLE.load(Ordering::Relaxed) {
+            BAR_VISIBLE.store(false, Ordering::Relaxed);
+            SWALLOWED_VK.store(vk, Ordering::Relaxed);
+            if let Some(tx) = HOOK_EVENT_TX.get() {
+                let _ = tx.send(HookEvent::HideBar);
+            }
+            return LRESULT(1);
+        } else if is_up && SWALLOWED_VK.load(Ordering::Relaxed) == vk {
+            SWALLOWED_VK.store(0, Ordering::Relaxed);
+            return LRESULT(1);
+        }
     }
 
     let (enabled, target) = unpack_hotkey(HOTKEY_PACKED.load(Ordering::Relaxed));
